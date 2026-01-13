@@ -1,0 +1,24 @@
+# Working directories (temporary task workspaces)
+Working/
+
+# Temporary files
+*.tmp
+*.temp
+*.log~
+*.swp
+*.swo
+*~
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+
+# Environment files (if any added later)
+.env
+.env.local

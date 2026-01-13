@@ -1,0 +1,243 @@
+{
+  "main": {
+    "id": "6105f6939ac077fb",
+    "type": "split",
+    "children": [
+      {
+        "id": "4b22d3808ffe87bb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b78da91a60d4520a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "TASKS.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "TASKS"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "26d37959768693f5",
+    "type": "split",
+    "children": [
+      {
+        "id": "6272aa4c89c01acb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cfb0eee6d7b20e4b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Logs/TASK_001_COMPLETION.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "TASK_001_COMPLETION"
+            }
+          },
+          {
+            "id": "efed94f3fa1a157e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "b33880c39d0aa568",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "df8ee9f98f290a0f",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 299.5
+  },
+  "right": {
+    "id": "93c817813e98bec9",
+    "type": "split",
+    "children": [
+      {
+        "id": "27bf7238067d1059",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e1db02042d4d62a1",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "TASKS.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for TASKS"
+            }
+          },
+          {
+            "id": "88f4ec51f1575839",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "TASKS.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from TASKS"
+            }
+          },
+          {
+            "id": "41dbf9edae15d688",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "08760d7dfc554b42",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "a356e8d58615928e",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "TASKS.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of TASKS"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "b78da91a60d4520a",
+  "lastOpenFiles": [
+    "STATUS.md.tmp.13032.1768340928669",
+    "TASKS.md.tmp.13032.1768340911351",
+    "STATUS.md",
+    "Logs/Failures/TASK_004_FAILURE.md",
+    "Archive/Failed/TASK_004/checkpoints.md",
+    "Archive/Failed/TASK_004/progress.md",
+    "Logs/TASK_001_COMPLETION.md",
+    "Working/TASK_004/PROGRESS.md",
+    "Archive/Failed/TASK_004/plan.md",
+    "Archive/Failed/TASK_004/failure_report.md",
+    "Archive/Failed/TASK_004/execution_log.log",
+    "Archive/Failed/TASK_004",
+    "2026-01-14.md",
+    "STATUS.md.tmp.13032.1768340614707",
+    "Working/TASK_004/CHECKPOINTS.md",
+    "Working/TASK_001/PROGRESS.md",
+    "ERRORS.md.tmp.13032.1768340576123",
+    "Logs/Executions/TASK_004_EXECUTION.log.tmp.13032.1768340530669",
+    "Logs/Executions/TASK_004_EXECUTION.log.tmp.13032.1768340499558",
+    "Working/TASK_004/workspace",
+    "Working/TASK_004/temp",
+    "Working/TASK_004/outputs",
+    "Planning/Approved/TASK_004_PLAN.md",
+    "Planning/Active/TASK_004_PLAN.md",
+    "Needs_Action/TASK_004.md",
+    "Archive/Completed/TASK_003/plan.md",
+    "Needs_Action/TEST_TASK.md",
+    "Planning/Approved/TASK_003_PLAN.md",
+    "Needs_Action/TASK_003.md",
+    "Logs/Completions/TASK_002_COMPLETION.md",
+    "Planning/Active/TASK_003_PLAN.md",
+    "TASKS.md",
+    "Untitled 2.canvas",
+    "Untitled 1.canvas",
+    "Approvals/Granted/TASK_002_APPROVAL.md",
+    "Untitled.canvas",
+    "Archive/Completed/TASK_002/approvals/TASK_002_APPROVAL.md",
+    "Archive/Completed/TASK_002/checkpoints.md",
+    "Archive/Completed/TASK_002/progress.md"
+  ]
+}

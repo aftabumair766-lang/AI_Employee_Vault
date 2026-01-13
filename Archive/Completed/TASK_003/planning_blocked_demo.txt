@@ -1,0 +1,73 @@
+# PLANNING AND BLOCKED STATES DEMONSTRATION
+
+Task ID: TASK_003
+Started: 2026-01-14 02:19:15
+
+## PLANNING State Demonstrated
+
+✓ Task transitioned to PLANNING state (02:19:15)
+✓ Plan created at Planning/Active/TASK_003_PLAN.md
+✓ Plan approved and moved to Planning/Approved/
+✓ Plan includes: steps, dependencies, blocker simulation strategy
+
+## Execution Started
+
+✓ Transitioned to IN_PROGRESS (02:20:30)
+✓ Created Working/TASK_003/ workspace
+
+---
+
+## BLOCKED State Demonstrated
+
+✓ Encountered simulated blocker: Resource unavailability (02:21:15)
+✓ Transitioned to BLOCKED state
+✓ Logged blocker in ERRORS.md as ERROR_001
+✓ Updated STATUS.md to show BLOCKED state
+✓ Blocker details documented with full context
+
+## Blocker Resolution
+
+✓ Simulated resource became available (02:22:00)
+✓ Updated ERRORS.md with resolution status
+✓ Transitioned BLOCKED → IN_PROGRESS
+✓ Execution resumed successfully
+
+## Task Completion
+
+✓ Deliverable completed after blocker resolution
+✓ All state transitions logged properly
+✓ Complete audit trail maintained
+
+---
+
+## State Transitions Completed
+
+1. **NEEDS_ACTION** (02:18:29) - Task created
+2. **PLANNING** (02:19:15) - Plan created and approved
+3. **IN_PROGRESS** (02:20:30) - Execution started
+4. **BLOCKED** (02:21:15) - Blocker encountered
+5. **IN_PROGRESS** (02:22:00) - Blocker resolved, resumed
+6. **COMPLETED** (pending) - Task finishing
+7. **DONE** (pending) - Final state
+
+## Files Created
+
+- Needs_Action/TASK_003.md (task specification)
+- Planning/Approved/TASK_003_PLAN.md (approved plan)
+- Working/TASK_003/ (workspace)
+- ERRORS.md (blocker logged as ERROR_001)
+- Logs/Executions/TASK_003_EXECUTION.log (complete audit trail)
+- This file (planning_blocked_demo.txt)
+
+## Compliance
+
+Demonstrates full compliance with:
+- TASK_IMPLEMENTATION_SPEC.md (PLANNING and BLOCKED states)
+- CONSTITUTION.md (Article VI: Error Handling Philosophy)
+- Proper blocker logging, resolution, and recovery workflow
+
+---
+
+**Demonstration Complete**
+**PLANNING and BLOCKED states successfully validated**
+
