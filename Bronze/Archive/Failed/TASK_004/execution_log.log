@@ -1,0 +1,28 @@
+[2026-01-14 02:32:58.712] [NEEDS_ACTION] [INFO] TASK_004 created: Demonstrate FAILED state handling
+[2026-01-14 02:32:58.712] [NEEDS_ACTION] [INFO] Task added to TASKS.md with NEEDS_ACTION status
+[2026-01-14 02:32:58.712] [NEEDS_ACTION] [INFO] Task specification file created at Needs_Action/TASK_004.md
+[2026-01-14 02:32:58.712] [NEEDS_ACTION] [INFO] This task will intentionally fail to demonstrate FAILED state handling
+[2026-01-14 02:33:15.200] [PLANNING] [INFO] State transition: NEEDS_ACTION → PLANNING
+[2026-01-14 02:33:15.200] [PLANNING] [INFO] Task requires planning before execution
+[2026-01-14 02:33:15.200] [PLANNING] [INFO] Creating plan that explicitly acknowledges intentional failure scenario
+[2026-01-14 02:33:30.500] [PLANNING] [INFO] Plan created at Planning/Active/TASK_004_PLAN.md
+[2026-01-14 02:33:30.500] [PLANNING] [INFO] Plan includes 30 steps for intentional failure demonstration
+[2026-01-14 02:34:00.100] [PLANNING] [INFO] Plan approved and moved to Planning/Approved/
+[2026-01-14 02:34:00.100] [PLANNING] [INFO] Plan explicitly warns about intentional failure scenario
+[2026-01-14 02:34:20.300] [IN_PROGRESS] [INFO] State transition: PLANNING → IN_PROGRESS
+[2026-01-14 02:34:20.300] [IN_PROGRESS] [INFO] Beginning task execution (intentional failure scenario)
+[2026-01-14 02:34:20.300] [IN_PROGRESS] [INFO] Created Working/TASK_004/ workspace
+[2026-01-14 02:34:35.100] [IN_PROGRESS] [INFO] Created PROGRESS.md and CHECKPOINTS.md
+[2026-01-14 02:34:35.100] [IN_PROGRESS] [INFO] Workspace ready for execution
+[2026-01-14 02:34:50.200] [IN_PROGRESS] [INFO] Beginning simulated file processing operation
+[2026-01-14 02:34:50.200] [IN_PROGRESS] [INFO] Processing data validation checks...
+[2026-01-14 02:35:05.400] [IN_PROGRESS] [ERROR] Data corruption detected during processing
+[2026-01-14 02:35:05.400] [IN_PROGRESS] [ERROR] Validation checksum mismatch: expected 0xABCD1234, got 0x00000000
+[2026-01-14 02:35:05.400] [IN_PROGRESS] [CRITICAL] Critical validation failure - data integrity compromised
+[2026-01-14 02:35:05.400] [IN_PROGRESS] [CRITICAL] Error assessed as NON-RECOVERABLE
+[2026-01-14 02:35:05.400] [IN_PROGRESS] [CRITICAL] Unable to proceed with task execution
+[2026-01-14 02:35:05.400] [IN_PROGRESS] [CRITICAL] Initiating FAILED state transition
+[2026-01-14 02:35:15.600] [FAILED] [CRITICAL] State transition: IN_PROGRESS → FAILED
+[2026-01-14 02:35:15.600] [FAILED] [CRITICAL] Logged critical error to ERRORS.md as ERROR_002
+[2026-01-14 02:35:15.600] [FAILED] [INFO] Task has failed due to non-recoverable data corruption
+[2026-01-14 02:35:15.600] [FAILED] [INFO] Beginning failure handling procedures per TASK_IMPLEMENTATION_SPEC.md Section 7.3

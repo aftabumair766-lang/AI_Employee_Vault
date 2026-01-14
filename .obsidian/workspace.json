@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "TASKS.md",
+                "file": "Archive/Failed/TASK_004/progress.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "TASKS"
+              "title": "progress"
             }
           }
         ]
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "TASKS.md",
+                "file": "Archive/Failed/TASK_004/progress.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for TASKS"
+              "title": "Backlinks for progress"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "TASKS.md",
+                "file": "Archive/Failed/TASK_004/progress.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from TASKS"
+              "title": "Outgoing links from progress"
             }
           },
           {
@@ -171,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "TASKS.md",
+                "file": "Archive/Failed/TASK_004/progress.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of TASKS"
+              "title": "Outline of progress"
             }
           }
         ]
@@ -198,46 +198,46 @@
       "bases:Create new base": false
     }
   },
-  "active": "b78da91a60d4520a",
+  "active": "efed94f3fa1a157e",
   "lastOpenFiles": [
-    "STATUS.md.tmp.13032.1768340928669",
-    "TASKS.md.tmp.13032.1768340911351",
-    "STATUS.md",
-    "Logs/Failures/TASK_004_FAILURE.md",
-    "Archive/Failed/TASK_004/checkpoints.md",
-    "Archive/Failed/TASK_004/progress.md",
-    "Logs/TASK_001_COMPLETION.md",
-    "Working/TASK_004/PROGRESS.md",
-    "Archive/Failed/TASK_004/plan.md",
-    "Archive/Failed/TASK_004/failure_report.md",
-    "Archive/Failed/TASK_004/execution_log.log",
-    "Archive/Failed/TASK_004",
-    "2026-01-14.md",
-    "STATUS.md.tmp.13032.1768340614707",
-    "Working/TASK_004/CHECKPOINTS.md",
-    "Working/TASK_001/PROGRESS.md",
-    "ERRORS.md.tmp.13032.1768340576123",
-    "Logs/Executions/TASK_004_EXECUTION.log.tmp.13032.1768340530669",
-    "Logs/Executions/TASK_004_EXECUTION.log.tmp.13032.1768340499558",
-    "Working/TASK_004/workspace",
-    "Working/TASK_004/temp",
-    "Working/TASK_004/outputs",
-    "Planning/Approved/TASK_004_PLAN.md",
-    "Planning/Active/TASK_004_PLAN.md",
-    "Needs_Action/TASK_004.md",
-    "Archive/Completed/TASK_003/plan.md",
-    "Needs_Action/TEST_TASK.md",
-    "Planning/Approved/TASK_003_PLAN.md",
-    "Needs_Action/TASK_003.md",
-    "Logs/Completions/TASK_002_COMPLETION.md",
-    "Planning/Active/TASK_003_PLAN.md",
-    "TASKS.md",
+    "TASKS_Silver.md",
+    "TASKS_Gold.md",
+    "STATUS_Silver.md",
+    "STATUS_Gold.md",
+    "MCP_REGISTRY_Silver.md",
+    "MCP_REGISTRY_Gold.md",
+    "ERRORS_Silver.md",
+    "ERRORS_Gold.md",
+    "DASHBOARD_Silver.md",
+    "DASHBOARD_Gold.md",
+    "Bronze/TASKS.md",
+    "Bronze/STATUS.md",
+    "Bronze/Planning/Approved/TASK_004_PLAN.md",
+    "Bronze/Planning/Approved/TASK_003_PLAN.md",
+    "Bronze/Planning/Approved",
+    "Bronze/Outputs/planning_blocked_demo.txt",
+    "Bronze/Outputs/hello_world.txt",
+    "Bronze/Outputs/approval_demo.txt",
+    "Bronze/Outputs",
+    "Bronze/Needs_Action/TEST_TASK.md",
+    "Bronze/Needs_Action/TASK_004.md",
+    "Bronze/Needs_Action/TASK_003.md",
+    "Bronze/Needs_Action",
+    "Bronze/MCP_REGISTRY.md",
+    "Bronze/Logs/Failures/TASK_004_FAILURE.md",
+    "Bronze/Logs/Failures",
+    "Bronze/Logs/Executions/TASK_004_EXECUTION.log",
+    "Bronze/Logs/Executions/TASK_003_EXECUTION.log",
+    "Bronze/Logs/Executions/TASK_002_EXECUTION.log",
+    "Bronze/Logs/Completions/TASK_002_COMPLETION.md",
+    "Bronze/ERRORS.md",
+    "Bronze/DASHBOARD.md",
+    "Bronze/Archive/Failed/TASK_004/progress.md",
+    "Bronze/Archive/Failed/TASK_004/plan.md",
+    "Bronze/Archive/Failed/TASK_004/failure_report.md",
+    "Bronze/Archive/Failed/TASK_004/checkpoints.md",
     "Untitled 2.canvas",
     "Untitled 1.canvas",
-    "Approvals/Granted/TASK_002_APPROVAL.md",
-    "Untitled.canvas",
-    "Archive/Completed/TASK_002/approvals/TASK_002_APPROVAL.md",
-    "Archive/Completed/TASK_002/checkpoints.md",
-    "Archive/Completed/TASK_002/progress.md"
+    "Untitled.canvas"
   ]
 }

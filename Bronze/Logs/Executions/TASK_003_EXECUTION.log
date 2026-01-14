@@ -1,0 +1,24 @@
+[2026-01-14 02:18:29.130] [NEEDS_ACTION] [INFO] TASK_003 created: Demonstrate PLANNING and BLOCKED states workflow
+[2026-01-14 02:18:29.130] [NEEDS_ACTION] [INFO] Task added to TASKS.md with NEEDS_ACTION status
+[2026-01-14 02:18:29.130] [NEEDS_ACTION] [INFO] Task specification file created at Needs_Action/TASK_003.md
+[2026-01-14 02:18:29.130] [NEEDS_ACTION] [INFO] This task will demonstrate PLANNING and BLOCKED states (Phase 2+ functionality)
+[2026-01-14 02:19:15.400] [PLANNING] [INFO] State transition: NEEDS_ACTION → PLANNING
+[2026-01-14 02:19:15.400] [PLANNING] [INFO] Task requires planning before execution
+[2026-01-14 02:19:15.400] [PLANNING] [INFO] Creating plan in Planning/Active/
+[2026-01-14 02:20:10.200] [PLANNING] [INFO] Plan approved and moved to Planning/Approved/
+[2026-01-14 02:20:30.500] [IN_PROGRESS] [INFO] State transition: PLANNING → IN_PROGRESS
+[2026-01-14 02:20:30.500] [IN_PROGRESS] [INFO] Created Working/TASK_003/ workspace
+[2026-01-14 02:21:15.800] [BLOCKED] [ERROR] State transition: IN_PROGRESS → BLOCKED
+[2026-01-14 02:21:15.800] [BLOCKED] [ERROR] Blocker encountered: Resource unavailability (simulated)
+[2026-01-14 02:21:15.800] [BLOCKED] [ERROR] Logged blocker to ERRORS.md as ERROR_001
+[2026-01-14 02:21:15.800] [BLOCKED] [INFO] Task is now in BLOCKED state awaiting resolution
+[2026-01-14 02:22:00.100] [BLOCKED] [INFO] Blocker resolved: Resource now available
+[2026-01-14 02:22:00.100] [IN_PROGRESS] [INFO] State transition: BLOCKED → IN_PROGRESS
+[2026-01-14 02:22:00.100] [IN_PROGRESS] [INFO] Updated ERRORS.md with resolution
+[2026-01-14 02:22:00.100] [IN_PROGRESS] [INFO] Resuming task execution
+[2026-01-14 02:22:30.500] [IN_PROGRESS] [INFO] Completed deliverable creation
+[2026-01-14 02:22:30.500] [IN_PROGRESS] [INFO] Copied deliverable to Outputs/planning_blocked_demo.txt
+[2026-01-14 02:23:00.000] [COMPLETED] [INFO] State transition: IN_PROGRESS → COMPLETED
+[2026-01-14 02:23:00.000] [DONE] [INFO] State transition: COMPLETED → DONE
+[2026-01-14 02:23:00.000] [DONE] [INFO] Task lifecycle complete: NEEDS_ACTION → PLANNING → IN_PROGRESS → BLOCKED → IN_PROGRESS → COMPLETED → DONE
+[2026-01-14 02:23:00.000] [DONE] [INFO] PLANNING and BLOCKED states successfully demonstrated
