@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "MCP_REGISTRY_Silver.md",
+                "file": "STATUS_Silver.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "MCP_REGISTRY_Silver"
+              "title": "STATUS_Silver"
             }
           }
         ]
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "MCP_REGISTRY_Silver.md",
+                "file": "STATUS_Silver.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for MCP_REGISTRY_Silver"
+              "title": "Backlinks for STATUS_Silver"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "MCP_REGISTRY_Silver.md",
+                "file": "STATUS_Silver.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from MCP_REGISTRY_Silver"
+              "title": "Outgoing links from STATUS_Silver"
             }
           },
           {
@@ -171,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "MCP_REGISTRY_Silver.md",
+                "file": "STATUS_Silver.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of MCP_REGISTRY_Silver"
+              "title": "Outline of STATUS_Silver"
             }
           }
         ]
@@ -200,6 +200,22 @@
   },
   "active": "b78da91a60d4520a",
   "lastOpenFiles": [
+    "Archive_Silver/Completed/TASK_102/artifacts/architecture_analysis.md",
+    "Archive_Silver/Completed/TASK_102/completion_report.md",
+    "Archive_Silver/Completed/TASK_102/plan.md",
+    "Archive_Silver/Completed/TASK_102/execution_log.log",
+    "Archive_Silver/Completed/TASK_102/artifacts",
+    "Archive_Silver/Completed/TASK_102",
+    "Logs_Silver/Completions/TASK_102_COMPLETION.md",
+    "TASKS_Silver.md",
+    "STATUS_Silver.md.tmp.13032.1768407775140",
+    "Outputs_Silver/architecture_analysis.md",
+    "STATUS_Silver.md.tmp.13032.1768406965244",
+    "Planning_Silver/Approved/TASK_102_PLAN.md",
+    "Planning_Silver/Active/TASK_102_PLAN.md",
+    "Logs_Silver/Executions/TASK_102_EXECUTION.log",
+    "Needs_Action_Silver/TASK_102.md",
+    "MCP_REGISTRY_Silver.md",
     "DASHBOARD_Silver.md.tmp.13032.1768406513609",
     "MCP_REGISTRY.md",
     "STATUS_Silver.md.tmp.13032.1768406496931",
@@ -209,33 +225,17 @@
     "Archive_Silver/Completed/TASK_101/completion_report.md",
     "Archive_Silver/Completed/TASK_101/execution_log.log",
     "Archive_Silver/Completed/TASK_101/artifacts",
-    "Archive_Silver/Completed/TASK_101",
     "Logs_Silver/Completions/TASK_101_COMPLETION.md",
-    "STATUS_Silver.md.tmp.13032.1768406136681",
-    "TASKS_Silver.md.tmp.13032.1768406124667",
     "Archive/Failed/TASK_004/progress.md",
     "Outputs_Silver/autonomous_agent_best_practices.md",
-    "Outputs_Silver/autonomous_agent_best_practices.md.tmp.13032.1768406065308",
-    "Working_Silver/TASK_101/sources",
-    "Working_Silver/TASK_101/research_notes",
-    "Working_Silver/TASK_101/drafts",
     "Planning_Silver/Approved/TASK_101_PLAN.md",
     "Planning_Silver/Active/TASK_101_PLAN.md",
     "Needs_Action_Silver/TASK_101.md",
-    "TASKS_Silver.md",
     "TASKS_Gold.md",
     "STATUS_Silver.md",
     "STATUS_Gold.md",
-    "MCP_REGISTRY_Silver.md",
     "MCP_REGISTRY_Gold.md",
     "ERRORS_Silver.md",
-    "ERRORS_Gold.md",
-    "DASHBOARD_Silver.md",
-    "DASHBOARD_Gold.md",
-    "Bronze/TASKS.md",
-    "Bronze/STATUS.md",
-    "Bronze/Planning/Approved/TASK_004_PLAN.md",
-    "Bronze/Planning/Approved/TASK_003_PLAN.md",
     "Untitled 2.canvas",
     "Untitled 1.canvas",
     "Untitled.canvas"
