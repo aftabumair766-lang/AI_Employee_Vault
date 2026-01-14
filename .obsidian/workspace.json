@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "STATUS_Silver.md",
+                "file": "MCP_REGISTRY_Gold.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "STATUS_Silver"
+              "title": "MCP_REGISTRY_Gold"
             }
           }
         ]
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "STATUS_Silver.md",
+                "file": "MCP_REGISTRY_Gold.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for STATUS_Silver"
+              "title": "Backlinks for MCP_REGISTRY_Gold"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "STATUS_Silver.md",
+                "file": "MCP_REGISTRY_Gold.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from STATUS_Silver"
+              "title": "Outgoing links from MCP_REGISTRY_Gold"
             }
           },
           {
@@ -171,13 +171,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "STATUS_Silver.md",
+                "file": "MCP_REGISTRY_Gold.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of STATUS_Silver"
+              "title": "Outline of MCP_REGISTRY_Gold"
             }
           }
         ]
@@ -200,42 +200,42 @@
   },
   "active": "b78da91a60d4520a",
   "lastOpenFiles": [
+    "DASHBOARD_Silver.md.tmp.13032.1768409456571",
+    "MCP_REGISTRY.md",
+    "MCP_REGISTRY_Silver.md",
+    "Company_Handbook.md",
+    "DASHBOARD_Silver.md",
+    "Archive_Silver/Completed/TASK_103/artifacts/system_metrics_analysis.ipynb",
+    "Archive_Silver/Completed/TASK_103/completion_report.md",
+    "Archive_Silver/Completed/TASK_103/plan.md",
+    "Archive_Silver/Completed/TASK_103/execution_log.log",
+    "Archive_Silver/Completed/TASK_103/artifacts",
+    "Archive_Silver/Completed/TASK_103",
+    "Logs_Silver/Completions/TASK_103_COMPLETION.md",
+    "README.md",
+    "STATUS_Silver.md.tmp.13032.1768409208083",
+    "TASKS_Silver.md.tmp.13032.1768409201393",
+    "STATUS.md",
+    "STATUS_Gold.md",
+    "STATUS_Silver.md",
+    "Outputs_Silver/system_metrics_analysis.ipynb",
+    "STATUS_Silver.md.tmp.13032.1768408709882",
+    "Logs_Silver/Executions/TASK_103_EXECUTION.log",
+    "STATUS_Silver.md.tmp.13032.1768408593749",
+    "Planning_Silver/Approved/TASK_103_PLAN.md",
+    "Planning_Silver/Active/TASK_103_PLAN.md",
+    "Needs_Action_Silver/TASK_103.md",
     "Archive_Silver/Completed/TASK_102/artifacts/architecture_analysis.md",
     "Archive_Silver/Completed/TASK_102/completion_report.md",
     "Archive_Silver/Completed/TASK_102/plan.md",
-    "Archive_Silver/Completed/TASK_102/execution_log.log",
-    "Archive_Silver/Completed/TASK_102/artifacts",
-    "Archive_Silver/Completed/TASK_102",
     "Logs_Silver/Completions/TASK_102_COMPLETION.md",
     "TASKS_Silver.md",
-    "STATUS_Silver.md.tmp.13032.1768407775140",
     "Outputs_Silver/architecture_analysis.md",
-    "STATUS_Silver.md.tmp.13032.1768406965244",
     "Planning_Silver/Approved/TASK_102_PLAN.md",
     "Planning_Silver/Active/TASK_102_PLAN.md",
-    "Logs_Silver/Executions/TASK_102_EXECUTION.log",
     "Needs_Action_Silver/TASK_102.md",
-    "MCP_REGISTRY_Silver.md",
-    "DASHBOARD_Silver.md.tmp.13032.1768406513609",
-    "MCP_REGISTRY.md",
-    "STATUS_Silver.md.tmp.13032.1768406496931",
     "Approvals_Gold/PENDING_APPROVALS.md",
     "Archive_Silver/Completed/TASK_101/artifacts/autonomous_agent_best_practices.md",
-    "Archive_Silver/Completed/TASK_101/plan.md",
-    "Archive_Silver/Completed/TASK_101/completion_report.md",
-    "Archive_Silver/Completed/TASK_101/execution_log.log",
-    "Archive_Silver/Completed/TASK_101/artifacts",
-    "Logs_Silver/Completions/TASK_101_COMPLETION.md",
-    "Archive/Failed/TASK_004/progress.md",
-    "Outputs_Silver/autonomous_agent_best_practices.md",
-    "Planning_Silver/Approved/TASK_101_PLAN.md",
-    "Planning_Silver/Active/TASK_101_PLAN.md",
-    "Needs_Action_Silver/TASK_101.md",
-    "TASKS_Gold.md",
-    "STATUS_Silver.md",
-    "STATUS_Gold.md",
-    "MCP_REGISTRY_Gold.md",
-    "ERRORS_Silver.md",
     "Untitled 2.canvas",
     "Untitled 1.canvas",
     "Untitled.canvas"
