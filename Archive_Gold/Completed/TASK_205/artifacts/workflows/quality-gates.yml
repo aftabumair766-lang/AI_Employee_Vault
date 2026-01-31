@@ -1,0 +1,97 @@
+name: Quality Gates
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  quality-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r Working_Gold/TASK_205/requirements-test.txt
+          pip install radon bandit safety
+
+      - name: Check test coverage threshold
+        run: |
+          cd Working_Gold/TASK_205
+          pytest tests/unit tests/integration --cov=. --cov-report=term --cov-fail-under=80
+        continue-on-error: false
+
+      - name: Check for failing tests
+        run: |
+          cd Working_Gold/TASK_205
+          pytest tests/unit tests/integration --maxfail=1
+        continue-on-error: false
+
+      - name: Check code complexity
+        run: |
+          cd Working_Gold/TASK_204/scripts
+          radon cc . -a -s --min C
+        continue-on-error: true
+
+      - name: Check cyclomatic complexity
+        run: |
+          cd Working_Gold/TASK_204/scripts
+          radon cc . --total-average --min C
+        continue-on-error: true
+
+      - name: Security check with Bandit
+        run: |
+          cd Working_Gold/TASK_204/scripts
+          bandit -r . -f json -o bandit-report.json
+        continue-on-error: true
+
+      - name: Upload Bandit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bandit-security-report
+          path: Working_Gold/TASK_204/scripts/bandit-report.json
+          retention-days: 30
+
+      - name: Check dependencies for vulnerabilities
+        run: |
+          cd Working_Gold/TASK_205
+          safety check --json > safety-report.json
+        continue-on-error: true
+
+      - name: Upload Safety report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: safety-vulnerability-report
+          path: Working_Gold/TASK_205/safety-report.json
+          retention-days: 30
+
+      - name: Verify all critical tests pass
+        run: |
+          cd Working_Gold/TASK_205
+          pytest -m "security" --tb=short
+        continue-on-error: false
+
+      - name: Check test execution time
+        run: |
+          cd Working_Gold/TASK_205
+          pytest tests/unit tests/integration --durations=10
+
+      - name: Quality gate summary
+        if: always()
+        run: |
+          echo "=== Quality Gate Results ==="
+          echo "Coverage: Must be >= 80%"
+          echo "Tests: All must pass"
+          echo "Security: Bandit scan completed"
+          echo "Dependencies: Safety check completed"
+          echo "==========================="
