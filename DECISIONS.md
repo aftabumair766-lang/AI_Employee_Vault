@@ -168,6 +168,71 @@ High - prometheus-client already in requirements, can add Prometheus exporter la
 
 ---
 
+## ADR-006: PyPI for Package Distribution
+
+**Date**: 2026-02-01
+**Status**: Approved (Human approval received)
+**Task**: TASK_211
+
+### Context
+Security skills (TASK_204) needed to be reusable across projects and available as a dependency for cloud deployment.
+
+### Decision
+Published as **PyPI package** (`ai-employee-security-skills`).
+
+### Alternatives Considered
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **PyPI** (chosen) | Global install via pip, versioned, standard | Requires account setup |
+| Git submodule | No external service | Complex, version management difficult |
+| Copy files manually | Simple | No versioning, no dependency management |
+
+### Rationale
+1. Standard Python distribution method
+2. `pip install` works everywhere
+3. Versioned releases (v1.0.0)
+4. Solves Docker build context issues (no need to COPY skills/)
+5. Professional - demonstrates package publishing expertise
+
+### Reversibility
+High - Package can be unpublished, code still exists in repo.
+
+---
+
+## ADR-007: Railway.app for Cloud Deployment
+
+**Date**: 2026-02-01
+**Status**: Approved (Human approval received)
+**Task**: TASK_212
+
+### Context
+Need free cloud deployment for public API access. No credit card charge risk.
+
+### Decision
+Selected **Railway.app** over alternatives.
+
+### Alternatives Considered
+
+| Platform | Pros | Cons |
+|----------|------|------|
+| **Railway.app** (chosen) | No credit card risk, GitHub login, Docker support, $5 free/month | Limited free tier |
+| Google Cloud Run | Industry standard, generous free tier | Credit card required, accidental charge risk |
+| Render.com | Free tier, no card | Sleep after 15 min, slower |
+| Azure | Enterprise standard | Credit card required, complex setup |
+
+### Rationale
+1. Zero charge risk (no credit card required)
+2. GitHub integration (one-click login)
+3. Docker support (uses existing Dockerfile)
+4. Free tier sufficient ($5/month credit, project uses ~$0.50)
+5. Human explicitly requested no-charge-risk option
+
+### Reversibility
+High - Can migrate to any cloud platform, API code is platform-independent.
+
+---
+
 ## Decision Summary
 
 | ADR | Decision | Task | Risk Level |
@@ -177,5 +242,7 @@ High - prometheus-client already in requirements, can add Prometheus exporter la
 | ADR-003 | Plain HTML Dashboard | TASK_208 | Low |
 | ADR-004 | Docker | TASK_209 | Low |
 | ADR-005 | In-Memory Metrics | TASK_210 | Low |
+| ADR-006 | PyPI Package | TASK_211 | Low |
+| ADR-007 | Railway.app Cloud | TASK_212 | Low |
 
 **All decisions**: High reversibility, Low risk, Human-approved.

@@ -1,0 +1,98 @@
+================================================================================
+EXECUTION LOG: TASK_211-212 (PyPI Publishing + Cloud Deployment)
+Level: Gold
+Started: 2026-02-01 20:00:00
+Completed: 2026-02-01 21:45:00
+Duration: ~1 hour 45 minutes
+================================================================================
+
+[2026-02-01 20:00:00] TASK_211 STARTED - PyPI Package Publishing
+[2026-02-01 20:00:01] ACTION: Docker container run (fixed PYTHONPATH + cryptography deps)
+[2026-02-01 20:05:00] ACTION: Container healthy - all 5 services UP
+[2026-02-01 20:10:00] ACTION: Docker image pushed to Docker Hub (umairaftab/ai-employee-vault:latest)
+[2026-02-01 20:15:00] ACTION: .gitignore updated with security key protections (*.key, *.pem, *.db)
+[2026-02-01 20:20:00] ACTION: git commit "Fix Docker container + add security gitignore rules"
+[2026-02-01 20:20:01] ACTION: git push origin main
+[2026-02-01 21:00:00] ACTION: Created pypi_package/ directory structure
+[2026-02-01 21:00:01] ACTION: Created pyproject.toml (setuptools build system)
+[2026-02-01 21:00:02] ACTION: Created src/ai_employee_security/__init__.py (package exports)
+[2026-02-01 21:00:03] ACTION: Copied 6 security modules into package src/
+[2026-02-01 21:00:04] ACTION: Created README.md (PyPI description)
+[2026-02-01 21:00:05] ACTION: Created LICENSE (MIT)
+[2026-02-01 21:05:00] ACTION: pip install build twine
+[2026-02-01 21:05:01] ERROR: build-backend "setuptools.backends._legacy:_Backend" not found
+[2026-02-01 21:05:02] FIX: Changed to "setuptools.build_meta"
+[2026-02-01 21:10:00] ACTION: python -m build - SUCCESS
+[2026-02-01 21:10:01] ARTIFACT: ai_employee_security_skills-1.0.0.tar.gz
+[2026-02-01 21:10:02] ARTIFACT: ai_employee_security_skills-1.0.0-py3-none-any.whl
+[2026-02-01 21:15:00] HUMAN: Created PyPI account (pypi.org)
+[2026-02-01 21:15:01] HUMAN: Enabled 2FA (authenticator app)
+[2026-02-01 21:15:02] HUMAN: Generated API token
+[2026-02-01 21:20:00] ERROR: twine upload - control characters in password (interactive paste)
+[2026-02-01 21:20:01] FIX: Used $env:TWINE_PASSWORD environment variable method
+[2026-02-01 21:25:00] ACTION: twine upload - SUCCESS
+[2026-02-01 21:25:01] LIVE: https://pypi.org/project/ai-employee-security-skills/1.0.0/
+[2026-02-01 21:25:02] VERIFY: pip install ai-employee-security-skills - SUCCESS
+[2026-02-01 21:25:03] VERIFY: All 5 modules import successfully
+[2026-02-01 21:25:04] SECURITY: API token cleared from environment ($env:TWINE_PASSWORD = "")
+[2026-02-01 21:25:05] TASK_211 COMPLETE
+
+[2026-02-01 21:30:00] TASK_212 STARTED - Cloud Deployment
+[2026-02-01 21:30:01] DECISION: Selected Railway.app (see DECISIONS.md ADR-007)
+[2026-02-01 21:30:02] HUMAN: Created Railway account (GitHub login)
+[2026-02-01 21:30:03] ACTION: npm install -g @railway/cli
+[2026-02-01 21:30:04] HUMAN: railway login (browser auth)
+[2026-02-01 21:31:00] ACTION: railway init - Created project "ai-employee-vault"
+[2026-02-01 21:31:01] PROJECT: https://railway.com/project/ccbccded-9a31-44f7-8622-f6b54b5b3841
+[2026-02-01 21:32:00] ACTION: railway up (attempt 1) - FAILED
+[2026-02-01 21:32:01] ERROR: COPY skills/ /app/skills/ - "/skills" not found
+[2026-02-01 21:32:02] CAUSE: .gitignore excludes Working_Gold/TASK_206/skills/
+[2026-02-01 21:33:00] ACTION: Created .dockerignore and .railwayignore
+[2026-02-01 21:34:00] ACTION: railway up (attempt 2) - FAILED (same error)
+[2026-02-01 21:35:00] FIX: Changed approach - use PyPI package instead of local skills files
+[2026-02-01 21:35:01] ACTION: Updated requirements.txt - added ai-employee-security-skills==1.0.0
+[2026-02-01 21:35:02] ACTION: Updated main.py - from ai_employee_security import ...
+[2026-02-01 21:35:03] ACTION: Updated Dockerfile - removed COPY skills/ and PYTHONPATH
+[2026-02-01 21:37:00] ACTION: railway up (attempt 3) - SUCCESS
+[2026-02-01 21:37:01] HUMAN: Generated domain on Railway dashboard
+[2026-02-01 21:38:00] LIVE: https://ai-employee-vault-production.up.railway.app
+[2026-02-01 21:38:01] ERROR: 502 Bad Gateway (app listening on 8000, Railway not routing)
+[2026-02-01 21:40:00] HUMAN: Set PORT=8000 environment variable on Railway
+[2026-02-01 21:41:00] ACTION: Railway auto-redeploy triggered
+[2026-02-01 21:44:00] VERIFY: /health endpoint returns healthy, all 5 services UP
+[2026-02-01 21:44:01] TASK_212 COMPLETE
+
+[2026-02-01 21:45:00] Constitutional compliance updates started (7 files)
+
+================================================================================
+FILES CREATED/MODIFIED:
+- Working_Gold/TASK_206/pypi_package/ (entire package directory)
+- Working_Gold/TASK_206/api/main.py (imports updated to PyPI package)
+- Working_Gold/TASK_206/requirements.txt (added ai-employee-security-skills)
+- Working_Gold/TASK_206/Dockerfile (removed skills COPY, PYTHONPATH)
+- Working_Gold/TASK_206/.dockerignore (new)
+- Working_Gold/TASK_206/.railwayignore (new)
+- .gitignore (updated with security protections)
+- TASKS_Gold.md (added TASK_211, TASK_212)
+- STATUS_Gold.md (updated deployment status)
+- CHANGELOG.md (added v2.1.0)
+- DECISIONS.md (added ADR-006, ADR-007)
+- REQUESTS.md (added requests 16-22)
+- RESPONSES.md (added responses 16-22)
+
+DEPLOYMENT STATUS:
+- GitHub: aftabumair766-lang/AI_Employee_Vault ✅
+- Docker Hub: umairaftab/ai-employee-vault:latest ✅
+- PyPI: pypi.org/project/ai-employee-security-skills/1.0.0 ✅
+- Cloud: ai-employee-vault-production.up.railway.app ✅
+- CI/CD: 3 GitHub Actions workflows ✅
+
+ERRORS: 4 (all resolved)
+- setuptools backend not found → fixed build_meta
+- twine control characters → fixed env var method
+- Railway skills not found (2x) → fixed PyPI package approach
+- Railway 502 → fixed PORT variable
+
+CONSTITUTIONAL COMPLIANCE: Full (7 files updated per Articles III, V, VIII)
+================================================================================
+END OF EXECUTION LOG

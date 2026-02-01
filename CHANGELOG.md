@@ -4,6 +4,31 @@ All notable changes to the AI Employee Vault project.
 
 ---
 
+## [2.1.0] - 2026-02-01
+
+### Added
+- **TASK_211**: PyPI Package Published - `ai-employee-security-skills` v1.0.0
+  - 6 security modules available globally via `pip install ai-employee-security-skills`
+  - Package includes: PathValidator, ArchiveEncryption, InputValidator, IntegrityChecker, SecureLogging, ApprovalVerifier
+  - MIT License, pyproject.toml build system
+- **TASK_212**: Cloud Deployment on Railway.app
+  - Live public URL: ai-employee-vault-production.up.railway.app
+  - Auto-deploy from local, health checks passing
+  - All 5 services running (path_validator, encryptor, integrity_checker, database, monitoring)
+
+### Changed
+- **main.py**: Imports now use PyPI package (`from ai_employee_security import ...`) instead of local files
+- **requirements.txt**: Added `ai-employee-security-skills==1.0.0` as dependency
+- **Dockerfile**: Removed skills COPY and PYTHONPATH (now installed via pip)
+- **.gitignore**: Added security key protections (*.key, *.pem, secrets/, *.db)
+
+### Security
+- .gitignore blocks all key files, certificates, and database files
+- API token used via environment variable (not stored in files)
+- No credentials committed to version control
+
+---
+
 ## [2.0.0] - 2026-02-01
 
 ### Added

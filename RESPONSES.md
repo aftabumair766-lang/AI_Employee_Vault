@@ -8,6 +8,13 @@ Per CONSTITUTION.md Article V, Section 5.3
 
 | # | Timestamp | Request Summary | Response | Outcome |
 |---|-----------|----------------|----------|---------|
+| 22 | 2026-02-01 21:45:00 | Complete project Constitutional updates | Updated all 7 files | ✅ Full compliance |
+| 21 | 2026-02-01 21:44:00 | Railway PORT config | Guided PORT=8000 setup, API live | ✅ Cloud deployment verified |
+| 20 | 2026-02-01 21:30:00 | Deploy to Railway.app | Deployed via railway CLI, domain generated | ✅ Live at railway.app |
+| 19 | 2026-02-01 21:25:00 | PyPI package upload | Guided secure token usage, package published | ✅ pip install working |
+| 18 | 2026-02-01 21:00:00 | Create PyPI account + publish | Guided account creation, built package, published | ✅ pypi.org/project/ai-employee-security-skills |
+| 17 | 2026-02-01 20:30:00 | Free cloud deployment options | Presented 6 options, recommended Railway (no card) | ✅ User chose Railway |
+| 16 | 2026-02-01 20:00:00 | Run Docker container | Fixed 2 errors (PYTHONPATH, cryptography), container healthy | ✅ All 5 services up |
 | 15 | 2026-02-01 17:00:00 | Create REQUESTS.md + RESPONSES.md | Created both files | ✅ Constitutional compliance complete |
 | 14 | 2026-02-01 16:55:00 | Check remaining work | Audit: 2 files missing (REQUESTS.md, RESPONSES.md) | ✅ Accurate assessment |
 | 13 | 2026-02-01 16:50:00 | Start Constitutional fixes | Committed fixes, pushed to GitHub | ✅ 11 violations fixed |
@@ -33,6 +40,8 @@ Per CONSTITUTION.md Article V, Section 5.3
 | HTML dashboard | No build step, simple | DECISIONS.md ADR-003 |
 | Docker deployment | Industry standard, portable | DECISIONS.md ADR-004 |
 | In-memory metrics | Zero dependencies | DECISIONS.md ADR-005 |
+| PyPI for distribution | Standard Python packaging, global pip install | DECISIONS.md ADR-006 |
+| Railway.app for cloud | Zero charge risk, no credit card | DECISIONS.md ADR-007 |
 
 ## Errors Encountered & Resolutions
 
@@ -43,9 +52,12 @@ Per CONSTITUTION.md Article V, Section 5.3
 | Windows "nul" file git error | Selective git add | ✅ Fail Safely |
 | Tests collecting 0 items | Pushed test files to repo | ✅ Recovery attempted |
 | 11 Constitutional violations | Self-audited, reported, fixed | ✅ Fail Visibly, no hiding |
+| Docker COPY skills/ failed | Switched to PyPI package import | ✅ Fail Informatively |
+| Railway deploy failed (skills not found) | Used PyPI package instead of local files | ✅ Recovery successful |
+| Docker container crash (cryptography missing) | Added to requirements.txt, rebuilt | ✅ Fail Safely |
 
 ---
 
-**Total Responses**: 15 (Gold level)
+**Total Responses**: 22 (Gold level)
 **Success Rate**: 100%
 **Constitutional Compliance**: Full

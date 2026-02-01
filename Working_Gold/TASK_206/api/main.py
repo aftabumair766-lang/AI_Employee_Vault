@@ -13,13 +13,8 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 import sys
 
-# Import existing security skills from TASK_204
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "TASK_204" / "scripts"))
-
-from path_validator import PathValidator
-from encryption_utils import ArchiveEncryption
-from integrity_checker import IntegrityChecker
-from input_validator import InputValidator
+# Import security skills from our PyPI package
+from ai_employee_security import PathValidator, ArchiveEncryption, IntegrityChecker, InputValidator
 
 # Import TASK_207: Database
 from api.database import get_db, init_db, seed_existing_tasks, Task, SecurityLog, SessionLocal

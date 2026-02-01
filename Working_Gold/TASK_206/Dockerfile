@@ -12,13 +12,9 @@ WORKDIR /app
 # Copy installed packages
 COPY --from=builder /root/.local /root/.local
 ENV PATH=/root/.local/bin:$PATH
-ENV PYTHONPATH=/app/skills:/app
 
 # Copy application code
 COPY . .
-
-# Copy security skills into container
-COPY skills/ /app/skills/
 
 EXPOSE 8000
 
