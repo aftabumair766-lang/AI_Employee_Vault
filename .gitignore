@@ -22,3 +22,26 @@ desktop.ini
 # Environment files (if any added later)
 .env
 .env.local
+
+# Security keys - NEVER commit
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+**/secrets/
+**/.ai_employee_vault.key
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.coverage
+coverage.xml
+
+# Database files
+*.db
+*.sqlite3
+
+# Docker build context copies (originals in TASK_204)
+Working_Gold/TASK_206/skills/
