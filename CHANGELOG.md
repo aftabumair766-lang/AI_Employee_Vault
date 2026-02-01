@@ -4,6 +4,25 @@ All notable changes to the AI Employee Vault project.
 
 ---
 
+## [3.0.0] - 2026-02-01
+
+### Added
+- **CONSTITUTION.md v2.0**: Article X - Platinum Tier (Always-On Cloud + Local Executive)
+  - Dual-agent architecture: Cloud Agent (24/7) + Local Agent (executive authority)
+  - Work-zone specialization: Cloud owns drafts, Local owns approvals and execution
+  - File-based delegation via synced vault (`/Needs_Action/`, `/Pending_Approval/`, `/Done/`)
+  - Claim-by-move rule for preventing double-work
+  - Secret isolation: Cloud NEVER stores WhatsApp sessions, banking creds, payment tokens
+  - Odoo Community integration (draft-only via MCP, Local approval for posting)
+  - Platinum demo gate: Email triage while Local offline → Cloud drafts → Local approves → send
+  - Optional A2A upgrade path (Phase 2)
+
+### Changed
+- CONSTITUTION.md upgraded from v1.0 to v2.0 (10 Articles → 11 Articles)
+- Article X (old Enforcement) renumbered to Article XI
+
+---
+
 ## [2.1.0] - 2026-02-01
 
 ### Added

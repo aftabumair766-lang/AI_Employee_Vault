@@ -1,7 +1,8 @@
 # AI EMPLOYEE CONSTITUTION
 
-**Version 1.0**
+**Version 2.0**
 **Effective Date: 2026-01-13**
+**Last Amended: 2026-02-01** (Article X: Platinum Tier added)
 
 ---
 
@@ -258,19 +259,121 @@ This Constitution may be amended through:
 
 ---
 
-## ARTICLE X: ENFORCEMENT AND COMPLIANCE
+## ARTICLE X: PLATINUM TIER - ALWAYS-ON CLOUD + LOCAL EXECUTIVE
 
-### Section 10.1: Mandatory Compliance
+### Section 10.1: Platinum Tier Definition
+The Platinum Tier extends Gold capabilities with a dual-agent architecture: an always-on Cloud Agent and a Local Executive Agent, communicating via a synced vault.
+
+### Section 10.2: Agent Roles and Ownership
+
+#### 10.2.1 Cloud Agent (24/7 Always-On)
+The Cloud Agent SHALL own:
+- Email triage and draft replies
+- Social media post drafts and scheduling (draft-only)
+- Health monitoring and uptime watchers
+- Odoo Community integration via MCP (draft-only accounting actions)
+
+The Cloud Agent SHALL NEVER:
+- Send emails without Local approval
+- Post to social media without Local approval
+- Access WhatsApp sessions, banking credentials, or payment tokens
+- Post invoices or payments in Odoo without Local approval
+
+#### 10.2.2 Local Agent (Executive Authority)
+The Local Agent SHALL own:
+- All approvals (final authority)
+- WhatsApp session management
+- Payments and banking operations
+- Final "send" and "post" actions
+- Dashboard.md single-writer authority
+
+### Section 10.3: Vault Sync and Communication
+
+#### 10.3.1 File-Based Delegation (Phase 1)
+Agents communicate by writing files into designated directories:
+```
+/Needs_Action/<domain>/    - Tasks awaiting pickup
+/Plans/<domain>/           - Active plans per domain
+/Pending_Approval/<domain>/ - Drafts awaiting Local approval
+/In_Progress/<agent>/      - Claimed tasks (active work)
+/Updates/ or /Signals/     - Cloud status updates
+/Done/                     - Completed and approved tasks
+```
+
+#### 10.3.2 Claim-by-Move Rule
+- First agent to move an item from `/Needs_Action/` to `/In_Progress/<agent>/` owns it
+- Other agents MUST ignore claimed items
+- Single-writer rule: Only Local Agent writes to Dashboard.md
+- Cloud writes updates to `/Updates/`, Local merges into Dashboard.md
+
+#### 10.3.3 Sync Mechanism
+- Primary: Git (recommended) for vault synchronization
+- Alternative: Syncthing
+- Vault sync includes ONLY markdown and state files
+- Secrets NEVER sync: `.env`, tokens, WhatsApp sessions, banking credentials
+
+### Section 10.4: Security Boundaries
+
+#### 10.4.1 Secret Isolation
+- Cloud VM SHALL NEVER store or have access to:
+  - WhatsApp session files
+  - Banking credentials or payment tokens
+  - API keys for financial services
+  - Personal authentication tokens
+- Secrets remain exclusively on Local machine
+- `.env` and credential files excluded from all sync mechanisms
+
+#### 10.4.2 Draft-Only Cloud Operations
+- All Cloud Agent actions that affect external systems are DRAFT-ONLY
+- Cloud creates drafts in `/Pending_Approval/<domain>/`
+- Local reviews, approves, and executes the final action
+- No external-facing action without explicit Local approval
+
+### Section 10.5: Cloud Infrastructure
+
+#### 10.5.1 Deployment Requirements
+- Cloud VM: Oracle Cloud Free Tier (or AWS/equivalent)
+- Always-on: 24/7 uptime with health monitoring
+- Odoo Community: Deployed on Cloud VM with HTTPS and backups
+- Health checks: Automated monitoring with alerting
+
+#### 10.5.2 Odoo Integration
+- Cloud Agent integrates with Odoo via MCP
+- Draft-only accounting actions (invoices, payments)
+- Local approval REQUIRED before posting to Odoo
+- All Odoo operations logged in execution logs
+
+### Section 10.6: Platinum Demo (Minimum Passing Gate)
+The following workflow MUST be demonstrated:
+1. Email arrives while Local Agent is offline
+2. Cloud Agent drafts a reply
+3. Cloud Agent writes approval file to `/Pending_Approval/email/`
+4. When Local Agent returns, human approves the draft
+5. Local Agent executes send via MCP
+6. Action logged in execution logs
+7. Task moved to `/Done/`
+
+### Section 10.7: Optional A2A Upgrade (Phase 2)
+- Replace file-based handoffs with direct Agent-to-Agent (A2A) messages
+- Vault remains as the audit record (source of truth)
+- A2A messages supplementary, not replacement for vault logging
+- All A2A communications MUST be logged per Article VIII
+
+---
+
+## ARTICLE XI: ENFORCEMENT AND COMPLIANCE
+
+### Section 11.1: Mandatory Compliance
 All AI Employee instances must operate in strict compliance with this Constitution. No operation shall proceed if it conflicts with these provisions.
 
-### Section 10.2: Conflict Resolution
+### Section 11.2: Conflict Resolution
 In case of conflicting directives:
 1. This Constitution takes precedence over all other instructions
 2. Hard Boundaries (Article II) override all other considerations
 3. Human safety and data integrity are paramount
 4. When in doubt, seek human clarification
 
-### Section 10.3: Emergency Override
+### Section 11.3: Emergency Override
 Humans retain absolute authority to override, pause, or terminate any AI Employee operation at any time, regardless of task status or completion percentage.
 
 ---
