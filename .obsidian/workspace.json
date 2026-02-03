@@ -1,19 +1,19 @@
 {
   "main": {
-    "id": "6105f6939ac077fb",
+    "id": "dd912970f7667bfa",
     "type": "split",
     "children": [
       {
-        "id": "4b22d3808ffe87bb",
+        "id": "24e0ab9bb2863af9",
         "type": "tabs",
         "children": [
           {
-            "id": "b78da91a60d4520a",
+            "id": "9fbaaa5ff1337d94",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Approvals_Gold/PENDING_APPROVALS.md",
+                "file": "Approvals_Silver/PENDING_APPROVALS.md",
                 "mode": "source",
                 "source": false
               },
@@ -27,29 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "26d37959768693f5",
+    "id": "a7f8cc64252af70e",
     "type": "split",
     "children": [
       {
-        "id": "6272aa4c89c01acb",
+        "id": "8eb69bc295cb6997",
         "type": "tabs",
         "children": [
           {
-            "id": "cfb0eee6d7b20e4b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Logs/TASK_001_COMPLETION.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "TASK_001_COMPLETION"
-            }
-          },
-          {
-            "id": "efed94f3fa1a157e",
+            "id": "248bd1f1351b5b1a",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -62,7 +48,7 @@
             }
           },
           {
-            "id": "b33880c39d0aa568",
+            "id": "e60b39b75733d808",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -79,7 +65,7 @@
             }
           },
           {
-            "id": "df8ee9f98f290a0f",
+            "id": "c0703da415e3c72e",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -88,28 +74,27 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 299.5
+    "width": 300
   },
   "right": {
-    "id": "93c817813e98bec9",
+    "id": "5d1e18abf9587790",
     "type": "split",
     "children": [
       {
-        "id": "27bf7238067d1059",
+        "id": "121b37df60b2efb8",
         "type": "tabs",
         "children": [
           {
-            "id": "e1db02042d4d62a1",
+            "id": "067b8a7e1add5898",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Archive/Failed/TASK_004/failure_report.md",
+                "file": "Approvals_Silver/PENDING_APPROVALS.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,25 +104,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for failure_report"
+              "title": "Backlinks for PENDING_APPROVALS"
             }
           },
           {
-            "id": "88f4ec51f1575839",
+            "id": "cd4a9abfff9a412d",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Archive/Failed/TASK_004/failure_report.md",
+                "file": "Approvals_Silver/PENDING_APPROVALS.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from failure_report"
+              "title": "Outgoing links from PENDING_APPROVALS"
             }
           },
           {
-            "id": "41dbf9edae15d688",
+            "id": "fcf768cd0ea11494",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -152,7 +137,7 @@
             }
           },
           {
-            "id": "08760d7dfc554b42",
+            "id": "60fceae5526a00db",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -166,18 +151,18 @@
             }
           },
           {
-            "id": "a356e8d58615928e",
+            "id": "d327dce0d117fd7e",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "Archive/Failed/TASK_004/failure_report.md",
+                "file": "Approvals_Silver/PENDING_APPROVALS.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of failure_report"
+              "title": "Outline of PENDING_APPROVALS"
             }
           }
         ]
@@ -198,46 +183,6 @@
       "bases:Create new base": false
     }
   },
-  "active": "b78da91a60d4520a",
-  "lastOpenFiles": [
-    "ARCHITECTURE.md",
-    "Working_Gold/TASK_202/workspace/phase4_cleanup_summary.md",
-    "Working_Gold/TASK_202/workspace/phase3_validation.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/BACKUP_MANIFEST.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/Approved",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/Approvals/Granted/TASK_002_APPROVAL.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/Approvals/Rejected",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/Approvals/PENDING_APPROVALS.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/Approvals/Granted",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/Approvals",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/TEST.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/TASKS.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/STATUS.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/MCP_REGISTRY.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/ERRORS.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/Dashboard.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/Company_Handbook.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942/2026-01-14.md",
-    "Archive_Gold/System_Cleanup_Backup/20260127_204942",
-    "Archive_Gold/System_Cleanup_Backup",
-    "Working_Gold/TASK_202/workspace/phase1_verification.md",
-    "Working_Gold/TASK_202/workspace",
-    "Logs_Gold/Executions/TASK_202_EXECUTION.log",
-    "Working_Gold/TASK_202/{workspace,temp,outputs}",
-    "Working_Gold/TASK_202",
-    "Planning_Gold/Active/TASK_202_PLAN.md",
-    "Needs_Action_Gold/TASK_202.md",
-    "TASKS_Gold.md",
-    "Archive_Gold/Completed/TASK_201/artifacts/code_quality_assessment.md",
-    "Archive_Gold/Completed/TASK_201/completion_report.md",
-    "Archive_Gold/Completed/TASK_201/plan.md",
-    "Logs_Gold/Completions/TASK_201_COMPLETION.md",
-    "Outputs_Gold/code_quality_assessment.md",
-    "TASKS_Silver.md",
-    "TEST.md",
-    "TASKS.md",
-    "Untitled.canvas",
-    "Untitled 2.canvas",
-    "Untitled 1.canvas"
-  ]
+  "active": "9fbaaa5ff1337d94",
+  "lastOpenFiles": []
 }
