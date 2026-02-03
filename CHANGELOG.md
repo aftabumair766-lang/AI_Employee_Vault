@@ -4,6 +4,29 @@ All notable changes to the AI Employee Vault project.
 
 ---
 
+## [3.1.0] - 2026-02-04
+
+### Added
+- **TASK_213**: Platinum Tier Implementation (Article X of CONSTITUTION.md)
+  - 5 reusable Platinum skills: VaultSync, DraftManager, ClaimManager, AgentHeartbeat, SecretGuard
+  - CloudAgent: Always-on agent that scans, claims, drafts, and submits for approval
+  - LocalAgent: Executive agent that reviews, approves, executes, and updates dashboard
+  - 10 new API endpoints at `/api/v1/platinum/` (status, tasks, approve, reject, demo, audit)
+  - 3 new database models: PlatinumTask, AgentStatus, PlatinumAuditLog
+  - File-based delegation directories (Needs_Action, Pending_Approval, In_Progress, Done)
+  - Claim-by-move rule preventing double-work between agents
+  - Secret boundary enforcement (Cloud blocked from .env, .key, banking, payment tokens)
+  - Section 10.6 demo gate: 7-step email triage workflow verified
+  - 54 tests passing (47 unit + 7 integration), 79% coverage on skills
+
+### Changed
+- **database.py**: Added 3 Platinum models
+- **main.py**: Mounted Platinum router
+- **requirements.txt**: Added watchdog dependency
+- **SKILLS.md**: Added 5 Platinum skills documentation
+
+---
+
 ## [3.0.0] - 2026-02-01
 
 ### Added

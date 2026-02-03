@@ -22,6 +22,9 @@ from api.database import get_db, init_db, seed_existing_tasks, Task, SecurityLog
 # Import TASK_210: Monitoring
 from api.monitoring import metrics
 
+# Import TASK_213: Platinum Tier
+from api.platinum_router import router as platinum_router
+
 # ========== APP SETUP ==========
 
 app = FastAPI(
@@ -31,6 +34,9 @@ app = FastAPI(
 )
 
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
+
+# Mount TASK_213: Platinum router
+app.include_router(platinum_router)
 
 # Initialize security modules (TASK_204 Skills)
 path_validator = PathValidator()

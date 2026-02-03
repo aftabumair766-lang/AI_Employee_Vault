@@ -1,8 +1,8 @@
 # REUSABLE SKILLS LIBRARY
 ## AI Employee Vault - Production-Ready Security & Testing Modules
 
-**Version**: 1.0
-**Last Updated**: 2026-02-01
+**Version**: 2.0
+**Last Updated**: 2026-02-04
 **Project**: AI_Employee_vault
 **License**: MIT
 
@@ -14,18 +14,19 @@
 2. [Quick Start](#quick-start)
 3. [Security Skills](#security-skills)
 4. [Testing Skills](#testing-skills)
-5. [Installation](#installation)
-6. [Integration Guide](#integration-guide)
-7. [API Reference](#api-reference)
-8. [Dependencies](#dependencies)
-9. [Performance Metrics](#performance-metrics)
-10. [Security Compliance](#security-compliance)
+5. [Platinum Skills](#platinum-skills)
+6. [Installation](#installation)
+7. [Integration Guide](#integration-guide)
+8. [API Reference](#api-reference)
+9. [Dependencies](#dependencies)
+10. [Performance Metrics](#performance-metrics)
+11. [Security Compliance](#security-compliance)
 
 ---
 
 ## Overview
 
-This library contains **8 production-ready, battle-tested skills** developed for the AI Employee Vault project. All modules have been security-hardened, tested with 360+ test cases, and validated through CI/CD pipelines.
+This library contains **13 production-ready, battle-tested skills** developed for the AI Employee Vault project. All modules have been security-hardened, tested with 410+ test cases, and validated through CI/CD pipelines.
 
 ### Key Features
 
@@ -42,6 +43,7 @@ This library contains **8 production-ready, battle-tested skills** developed for
 |----------|--------|----------|
 | **Security** | 6 modules | Path validation, encryption, input validation, logging, integrity, approvals |
 | **Testing** | 2 frameworks | Fixtures, factories, assertions for pytest |
+| **Platinum** | 5 modules | Vault sync, draft management, task claiming, heartbeat, secret guard |
 
 ---
 
@@ -1601,6 +1603,258 @@ def test_task_workflow(vault_root, temp_dir):
 
 ---
 
+## Platinum Skills
+
+### Overview
+
+The Platinum skills are 5 reusable modules that power the dual-agent architecture defined in CONSTITUTION.md Article X. They can be used independently in any multi-agent system.
+
+| Skill | Purpose | Reuse Case |
+|-------|---------|------------|
+| **VaultSync** | Git-based vault synchronization | Any multi-agent file sync |
+| **DraftManager** | Draft creation & approval workflow | Any approval-based system |
+| **ClaimManager** | Claim-by-move task ownership | Distributed task management |
+| **AgentHeartbeat** | Agent health monitoring | Any multi-agent system |
+| **SecretGuard** | Secret boundary enforcement | Multi-environment security |
+
+### 9. VaultSync - Git-Based Vault Synchronization
+
+**File**: `Platinum/src/vault_sync.py`
+**Test Coverage**: 46%
+**Lines of Code**: ~160
+
+#### Purpose
+Synchronizes vault state between Cloud and Local agents using git. Enforces file-type filtering to prevent secret leakage during sync.
+
+#### Key Features
+- Pull/push/sync operations via git
+- File extension whitelist (.md, .json, .txt, .yaml)
+- Blocks secrets (.env, *.key, *.pem, tokens)
+- Conflict detection and resolution
+- Sync history logging
+
+#### API Reference
+
+```python
+from Platinum.src.vault_sync import VaultSync
+
+sync = VaultSync("/path/to/vault", remote="origin", branch="main")
+
+# Pull latest state
+result = sync.pull()  # Returns SyncResult
+
+# Push local changes
+result = sync.push("Updated drafts")
+
+# Full sync (pull then push)
+result = sync.sync()
+
+# Check vault status
+status = sync.get_status()  # {"modified": [...], "untracked": [...]}
+
+# Filter files for safe sync
+safe_files = sync.validate_sync_files(["readme.md", ".env", "config.json"])
+# Returns: ["readme.md", "config.json"]
+```
+
+---
+
+### 10. DraftManager - Draft Creation & Approval Workflow
+
+**File**: `Platinum/src/draft_manager.py`
+**Test Coverage**: 95%
+**Lines of Code**: ~180
+
+#### Purpose
+Manages the full lifecycle of drafts: creation, submission for approval, approval, and rejection. Drafts are stored as JSON files in the vault's delegation directories.
+
+#### Key Features
+- Create drafts by domain (email, social, accounting, monitoring)
+- Submit for approval (moves to Pending_Approval/)
+- Approve (moves to Done/) or reject with reason
+- Full audit trail per draft
+- Search across all directories
+
+#### API Reference
+
+```python
+from Platinum.src.draft_manager import DraftManager
+
+dm = DraftManager("/path/to/vault")
+
+# Create a draft
+draft = dm.create_draft("email", "Re: Invoice", "Dear...", "cloud_agent")
+
+# Submit for approval
+dm.submit_for_approval(draft.draft_id)
+
+# List pending approvals
+pending = dm.list_pending(domain="email")
+
+# Approve
+approved = dm.approve(draft.draft_id, "local_agent")
+
+# Reject
+rejected = dm.reject(draft.draft_id, "local_agent", "Needs revision")
+
+# Get audit trail
+trail = dm.get_audit_trail(draft.draft_id)
+# [{"action": "created", ...}, {"action": "submitted_for_approval", ...}, ...]
+```
+
+---
+
+### 11. ClaimManager - Claim-by-Move Task Ownership
+
+**File**: `Platinum/src/claim_manager.py`
+**Test Coverage**: 87%
+**Lines of Code**: ~140
+
+#### Purpose
+Prevents double-work between agents by using atomic file moves. The first agent to move a task file from Needs_Action/ to In_Progress/<agent>/ owns the task.
+
+#### Key Features
+- Atomic claim-by-move (shutil.move)
+- Double-claim prevention
+- Release tasks back to available pool
+- Track ownership per agent
+- Domain-based task listing
+
+#### API Reference
+
+```python
+from Platinum.src.claim_manager import ClaimManager
+
+cm = ClaimManager("/path/to/vault")
+
+# List available tasks
+available = cm.list_available(domain="email")
+
+# Claim a task
+success = cm.claim("Needs_Action/email/task.json", "cloud")
+
+# Check if claimed
+cm.is_claimed("task.json")  # True
+
+# Get owner
+cm.get_owner("task.json")  # "cloud"
+
+# Release back
+cm.release("task.json", "cloud")
+
+# List all tasks owned by agent
+cm.list_claimed_by("cloud")
+```
+
+---
+
+### 12. AgentHeartbeat - Agent Health Monitoring
+
+**File**: `Platinum/src/agent_heartbeat.py`
+**Test Coverage**: 89%
+**Lines of Code**: ~100
+
+#### Purpose
+Tracks agent liveness via periodic heartbeat files. Supports background threading for continuous heartbeat emission.
+
+#### Key Features
+- Write heartbeat files with current status
+- Check if agent is alive (within timeout)
+- Background thread for continuous heartbeats
+- List all known agents and their status
+- Stale detection (missed heartbeats)
+
+#### API Reference
+
+```python
+from Platinum.src.agent_heartbeat import AgentHeartbeat
+
+hb = AgentHeartbeat("cloud_agent", "/path/to/vault", interval=30)
+
+# Manual heartbeat
+hb.beat(current_task="DRAFT-ABC123")
+
+# Check if alive
+hb.is_alive("cloud_agent", timeout=60)  # True/False
+
+# Get status
+status = hb.get_status("cloud_agent")
+# {"agent_name": "cloud_agent", "status": "online", "current_task": "...", "timestamp": "..."}
+
+# List all agents
+agents = hb.get_all_agents()
+
+# Background heartbeat
+hb.start_background()
+# ... agent does work ...
+hb.stop_background()
+```
+
+---
+
+### 13. SecretGuard - Secret Boundary Enforcement
+
+**File**: `Platinum/src/secret_guard.py`
+**Test Coverage**: 100%
+**Lines of Code**: ~80
+
+#### Purpose
+Enforces secret access boundaries between Cloud and Local agents. Cloud is blocked from accessing secrets. Local has full executive authority.
+
+#### Key Features
+- Role-based access control (cloud vs local)
+- Regex-based pattern matching for secret files
+- File list filtering for sync operations
+- Access attempt audit logging
+- Pre-defined safe resource types
+
+#### Blocked for Cloud Agent
+`.env`, `*.key`, `*.pem`, `*.p12`, `*.pfx`, `*.jks`, `*.secret`, `*.token`, `*.credentials`, `whatsapp_session/*`, `banking/*`, `payment_tokens/*`, `secrets/*`, `private/*`
+
+#### API Reference
+
+```python
+from Platinum.src.secret_guard import SecretGuard
+
+# Cloud agent - restricted
+cloud_guard = SecretGuard(agent_role="cloud")
+cloud_guard.can_access(".env")          # False
+cloud_guard.can_access("email_draft")   # True
+cloud_guard.can_access("vault.key")     # False
+
+# Local agent - full access
+local_guard = SecretGuard(agent_role="local")
+local_guard.can_access(".env")          # True
+local_guard.can_access("banking/creds") # True
+
+# Filter files for sync
+safe = cloud_guard.validate_sync_files(["readme.md", ".env", "data.json"])
+# Returns: ["readme.md", "data.json"]
+
+# Audit log
+log = cloud_guard.get_audit_log()
+# [{"agent_role": "cloud", "resource": ".env", "allowed": False, ...}, ...]
+```
+
+---
+
+### Platinum Integration Example
+
+```python
+from Platinum.src.cloud_agent import CloudAgent
+from Platinum.src.local_agent import LocalAgent
+
+# Start Cloud Agent (runs continuously, drafts responses)
+cloud = CloudAgent("/path/to/vault")
+cloud.run_once()  # Single scan-claim-draft-submit cycle
+
+# Start Local Agent (reviews and executes)
+local = LocalAgent("/path/to/vault")
+approved = local.run_once()  # Review and auto-approve pending drafts
+```
+
+---
+
 ## Installation
 
 ### Option 1: Copy All Skills
@@ -1778,6 +2032,11 @@ jobs:
 | SecureLogging | `get_secure_logger()` | Automatic log sanitization |
 | IntegrityChecker | `generate_checksum()`, `verify_checksum()` | File integrity verification |
 | ApprovalVerifier | `verify_transition()`, `requires_approval()` | Workflow approval enforcement |
+| VaultSync | `sync()`, `validate_sync_files()` | Multi-agent vault synchronization |
+| DraftManager | `create_draft()`, `approve()`, `reject()` | Draft approval workflows |
+| ClaimManager | `claim()`, `release()`, `is_claimed()` | Distributed task ownership |
+| AgentHeartbeat | `beat()`, `is_alive()`, `get_all_agents()` | Agent health monitoring |
+| SecretGuard | `can_access()`, `validate_sync_files()` | Secret boundary enforcement |
 
 ---
 
@@ -2094,6 +2353,7 @@ if not checker.verify_checksum('file.tar', checksum):
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.0 | 2026-02-04 | Added 5 Platinum skills (TASK_213) |
 | 1.0 | 2026-02-01 | Initial release with 8 skills |
 | 0.9 | 2026-01-30 | Beta release (TASK_205 Phase 5) |
 | 0.8 | 2026-01-29 | Security modules complete (TASK_204) |
@@ -2127,6 +2387,6 @@ To add new skills to this library:
 
 ---
 
-**Last Updated**: 2026-02-01
+**Last Updated**: 2026-02-04
 **Maintained By**: AI Employee Vault Project
-**Status**: Production Ready ✅
+**Status**: Production Ready

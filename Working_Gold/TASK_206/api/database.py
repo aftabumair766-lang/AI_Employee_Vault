@@ -66,6 +66,47 @@ class ApiKey(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
+# ========== PLATINUM TIER MODELS (TASK_213) ==========
+
+class PlatinumTask(Base):
+    __tablename__ = "platinum_tasks"
+
+    id = Column(Integer, primary_key=True)
+    task_id = Column(String(50), unique=True, index=True)
+    domain = Column(String(20))          # email, social, accounting, monitoring
+    title = Column(String(200))
+    body = Column(Text)
+    status = Column(String(30))          # NEEDS_ACTION, CLAIMED, DRAFTING, PENDING_APPROVAL, APPROVED, DONE
+    owner = Column(String(20))           # cloud, local, None
+    author = Column(String(20))
+    approver = Column(String(20), nullable=True)
+    reject_reason = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class AgentStatus(Base):
+    __tablename__ = "agent_status"
+
+    id = Column(Integer, primary_key=True)
+    agent_name = Column(String(20), unique=True)
+    status = Column(String(20))          # online, offline, busy
+    current_task = Column(String(50), nullable=True)
+    last_heartbeat = Column(DateTime)
+    tasks_completed = Column(Integer, default=0)
+
+
+class PlatinumAuditLog(Base):
+    __tablename__ = "platinum_audit_log"
+
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    agent = Column(String(20))
+    action = Column(String(50))
+    task_id = Column(String(50), nullable=True)
+    details = Column(Text)
+
+
 # ========== DATABASE OPERATIONS ==========
 
 def init_db():
