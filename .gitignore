@@ -45,3 +45,9 @@ coverage.xml
 
 # Docker build context copies (originals in TASK_204)
 Working_Gold/TASK_206/skills/
+
+# Build artifacts
+dist/
+
+# Windows artifacts
+nul
