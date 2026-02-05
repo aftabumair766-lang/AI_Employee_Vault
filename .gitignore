@@ -51,3 +51,16 @@ dist/
 
 # Windows artifacts
 nul
+
+# Platinum Tier - Deploy artifacts
+Platinum/deploy/*.env
+Platinum/deploy/.env
+*.log
+vault_sync_key
+vault_sync_key.pub
+
+# SSH keys (never commit)
+**/.ssh/
+**/id_rsa
+**/id_ed25519
+**/*.pem

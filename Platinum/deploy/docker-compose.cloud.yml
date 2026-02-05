@@ -1,0 +1,141 @@
+# AI Employee Platinum Tier - Cloud Deployment Stack
+# Oracle Cloud Always Free VM (ARM, 2GB+ RAM recommended)
+#
+# Usage:
+#   docker compose -f docker-compose.cloud.yml up -d
+#
+# Services:
+#   - cloud-agent: The always-on Cloud Agent
+#   - health-monitor: Health monitoring daemon
+#   - odoo: Odoo Community 17.0
+#   - odoo-db: PostgreSQL 15 for Odoo
+#   - caddy: HTTPS reverse proxy
+
+version: "3.8"
+
+services:
+  cloud-agent:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.cloud
+    container_name: ai-employee-cloud-agent
+    environment:
+      - PLATINUM_AGENT_ROLE=cloud
+      - PLATINUM_VAULT_PATH=/opt/ai-employee/vault
+      - PLATINUM_IMAP_HOST=${PLATINUM_IMAP_HOST:-imap.gmail.com}
+      - PLATINUM_IMAP_PORT=${PLATINUM_IMAP_PORT:-993}
+      - PLATINUM_IMAP_USER=${PLATINUM_IMAP_USER}
+      - PLATINUM_IMAP_PASSWORD=${PLATINUM_IMAP_PASSWORD}
+      - PLATINUM_ODOO_URL=http://odoo:8069
+      - PLATINUM_ODOO_DB=odoo
+      - PLATINUM_ODOO_USER=${PLATINUM_ODOO_USER:-admin}
+      - PLATINUM_ODOO_PASSWORD=${PLATINUM_ODOO_PASSWORD:-admin}
+      - PLATINUM_GIT_REMOTE=origin
+      - PLATINUM_GIT_BRANCH=main
+      - PLATINUM_GIT_SSH_KEY=/opt/ai-employee/.ssh/vault_sync_key
+      - PLATINUM_SYNC_INTERVAL=${PLATINUM_SYNC_INTERVAL:-300}
+      - PLATINUM_HEARTBEAT_INTERVAL=${PLATINUM_HEARTBEAT_INTERVAL:-30}
+    volumes:
+      - vault-data:/opt/ai-employee/vault
+      - ssh-keys:/opt/ai-employee/.ssh:ro
+    networks:
+      - ai-employee-net
+    depends_on:
+      - odoo
+    restart: unless-stopped
+
+  health-monitor:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.cloud
+    container_name: ai-employee-health-monitor
+    command: ["python", "-m", "Platinum.src.health_monitor_daemon"]
+    environment:
+      - PLATINUM_AGENT_ROLE=cloud
+      - PLATINUM_VAULT_PATH=/opt/ai-employee/vault
+      - PLATINUM_HEALTH_CHECK_INTERVAL=${PLATINUM_HEALTH_CHECK_INTERVAL:-60}
+      - PLATINUM_HEALTH_API_URL=http://cloud-agent:8000
+      - PLATINUM_ODOO_URL=http://odoo:8069
+    volumes:
+      - vault-data:/opt/ai-employee/vault
+    networks:
+      - ai-employee-net
+    depends_on:
+      - cloud-agent
+    restart: unless-stopped
+
+  sync-daemon:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.cloud
+    container_name: ai-employee-sync-daemon
+    command: ["python", "-m", "Platinum.src.sync_daemon"]
+    environment:
+      - PLATINUM_VAULT_PATH=/opt/ai-employee/vault
+      - PLATINUM_GIT_REMOTE=origin
+      - PLATINUM_GIT_BRANCH=main
+      - PLATINUM_GIT_SSH_KEY=/opt/ai-employee/.ssh/vault_sync_key
+      - PLATINUM_SYNC_INTERVAL=${PLATINUM_SYNC_INTERVAL:-300}
+    volumes:
+      - vault-data:/opt/ai-employee/vault
+      - ssh-keys:/opt/ai-employee/.ssh:ro
+    networks:
+      - ai-employee-net
+    restart: unless-stopped
+
+  odoo-db:
+    image: postgres:15
+    container_name: ai-employee-odoo-db
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-odoo}
+      POSTGRES_DB: postgres
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+    networks:
+      - ai-employee-net
+    restart: unless-stopped
+
+  odoo:
+    image: odoo:17.0
+    container_name: ai-employee-odoo
+    depends_on:
+      - odoo-db
+    environment:
+      HOST: odoo-db
+      USER: odoo
+      PASSWORD: ${POSTGRES_PASSWORD:-odoo}
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ../odoo/odoo.conf:/etc/odoo/odoo.conf:ro
+    networks:
+      - ai-employee-net
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: ai-employee-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - ai-employee-net
+    depends_on:
+      - odoo
+    restart: unless-stopped
+
+volumes:
+  vault-data:
+  ssh-keys:
+  odoo-db-data:
+  odoo-web-data:
+  caddy-data:
+  caddy-config:
+
+networks:
+  ai-employee-net:
+    driver: bridge

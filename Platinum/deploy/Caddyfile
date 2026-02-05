@@ -1,0 +1,41 @@
+# Caddy reverse proxy configuration for AI Employee
+# Provides HTTPS termination for Odoo and optional API
+
+# Replace with your actual domain or use localhost for testing
+{$DOMAIN:localhost} {
+    # Odoo web interface
+    handle /web/* {
+        reverse_proxy odoo:8069
+    }
+
+    handle /website/* {
+        reverse_proxy odoo:8069
+    }
+
+    handle /xmlrpc/* {
+        reverse_proxy odoo:8069
+    }
+
+    # Default to Odoo
+    handle {
+        reverse_proxy odoo:8069
+    }
+
+    # Security headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options SAMEORIGIN
+        Referrer-Policy strict-origin-when-cross-origin
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/access.log
+        format json
+    }
+}
+
+# Health check endpoint (optional, for monitoring)
+:8080 {
+    respond /health "OK" 200
+}

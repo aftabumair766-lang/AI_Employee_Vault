@@ -37,6 +37,9 @@ BLOCKED_PATTERNS = [
     r"payment_tokens(/.*)?$",
     r"secrets(/.*)?$",
     r"private(/.*)?$",
+    r"odoo_admin(/.*)?$",
+    r"imap_credentials(/.*)?$",
+    r"smtp_credentials(/.*)?$",
 ]
 
 # Resource types that are always safe for any agent

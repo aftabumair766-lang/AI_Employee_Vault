@@ -94,6 +94,40 @@ class AgentHeartbeat:
                 agents.append(self.get_status(agent_name))
         return agents
 
+    @classmethod
+    def get_health_summary(cls, vault_path: str, interval: int = 30) -> dict:
+        """Get a health summary for all agents (for HealthMonitor).
+
+        Returns:
+            Dict with agent names as keys and health status dicts as values.
+        """
+        updates_dir = Path(vault_path) / "Platinum" / "Updates"
+        summary = {}
+        if updates_dir.exists():
+            for f in updates_dir.glob("*_heartbeat.json"):
+                agent_name = f.stem.replace("_heartbeat", "")
+                try:
+                    data = json.loads(f.read_text(encoding="utf-8"))
+                    last_beat = datetime.fromisoformat(data["timestamp"])
+                    age_seconds = (datetime.utcnow() - last_beat).total_seconds()
+                    is_stale = age_seconds > interval * 2
+                    summary[agent_name] = {
+                        "status": "stale" if is_stale else data.get("status", "unknown"),
+                        "current_task": data.get("current_task"),
+                        "last_heartbeat": data["timestamp"],
+                        "age_seconds": round(age_seconds, 1),
+                        "healthy": not is_stale and data.get("status") == "online",
+                    }
+                except (json.JSONDecodeError, KeyError, ValueError):
+                    summary[agent_name] = {
+                        "status": "error",
+                        "current_task": None,
+                        "last_heartbeat": None,
+                        "age_seconds": None,
+                        "healthy": False,
+                    }
+        return summary
+
     def start_background(self) -> None:
         """Start emitting heartbeats in a background thread."""
         if self._background_thread and self._background_thread.is_alive():

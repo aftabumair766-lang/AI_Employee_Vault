@@ -26,6 +26,7 @@ from Platinum.src.draft_manager import DraftManager
 from Platinum.src.claim_manager import ClaimManager
 from Platinum.src.agent_heartbeat import AgentHeartbeat
 from Platinum.src.secret_guard import SecretGuard
+from Platinum.src.config import get_settings
 
 logger = logging.getLogger("platinum.cloud_agent")
 
@@ -35,15 +36,24 @@ class CloudAgent:
 
     AGENT_NAME = "cloud"
 
-    def __init__(self, vault_path: str):
-        self.vault_path = Path(vault_path)
-        self.vault_sync = VaultSync(str(vault_path))
-        self.draft_manager = DraftManager(str(vault_path))
-        self.claim_manager = ClaimManager(str(vault_path))
-        self.heartbeat = AgentHeartbeat(self.AGENT_NAME, str(vault_path), interval=30)
+    def __init__(self, vault_path: str = None, settings=None):
+        self.settings = settings or get_settings(AGENT_ROLE="cloud")
+        self.vault_path = Path(vault_path) if vault_path else self.settings.vault
+        self.vault_sync = VaultSync(
+            str(self.vault_path),
+            remote=self.settings.GIT_REMOTE,
+            branch=self.settings.GIT_BRANCH,
+        )
+        self.draft_manager = DraftManager(str(self.vault_path))
+        self.claim_manager = ClaimManager(str(self.vault_path))
+        self.heartbeat = AgentHeartbeat(
+            self.AGENT_NAME, str(self.vault_path),
+            interval=self.settings.HEARTBEAT_INTERVAL,
+        )
         self.secret_guard = SecretGuard(agent_role="cloud")
         self._running = False
         self._log: list = []
+        self._email_reader = None
 
     def _log_action(self, action: str, details: str):
         entry = {
@@ -152,34 +162,100 @@ class CloudAgent:
         )
 
     def draft_social_post(self, task_data: dict):
-        """Create a social media post draft."""
+        """Create a social media post draft using SocialDrafter."""
+        from Platinum.src.social_client import SocialDrafter
         title = task_data.get("title", "Update")
+        drafter = SocialDrafter()
+        social_draft = drafter.create_draft(
+            content=task_data.get("body", title),
+            platform=task_data.get("platform", "twitter"),
+            hashtags=task_data.get("hashtags", []),
+        )
         return self.draft_manager.create_draft(
             domain="social",
             title=title,
-            body=f"[Draft Social Post]\n{task_data.get('body', title)}",
+            body=drafter.draft_to_json(social_draft),
             author=self.AGENT_NAME,
         )
 
     def draft_accounting_entry(self, task_data: dict):
-        """Create an accounting entry draft."""
+        """Create an accounting entry draft (optionally via Odoo)."""
         title = task_data.get("title", "Entry")
+
+        # Try to create draft invoice in Odoo if configured
+        odoo_draft = None
+        if self.settings.has_odoo and task_data.get("partner_id"):
+            try:
+                from Platinum.src.odoo_client import OdooClient, OdooInvoiceLine
+                client = OdooClient(self.settings)
+                if client.connect():
+                    lines = []
+                    for line in task_data.get("lines", []):
+                        lines.append(OdooInvoiceLine(
+                            product_id=line.get("product_id", 1),
+                            name=line.get("name", title),
+                            quantity=line.get("quantity", 1),
+                            price_unit=line.get("price_unit", task_data.get("amount", 0)),
+                        ))
+                    if not lines:
+                        lines = [OdooInvoiceLine(
+                            product_id=1, name=title,
+                            quantity=1, price_unit=task_data.get("amount", 0),
+                        )]
+                    odoo_draft = client.create_draft_invoice(
+                        partner_id=task_data["partner_id"],
+                        lines=lines,
+                        ref=task_data.get("body", title),
+                    )
+                    self._log_action("odoo_draft", f"Created Odoo draft invoice: {odoo_draft['id']}")
+            except Exception as e:
+                self._log_action("odoo_error", f"Odoo draft failed: {e}")
+
+        body_data = {
+            "type": "draft_entry",
+            "description": task_data.get("body", title),
+            "amount": task_data.get("amount", 0),
+            "category": task_data.get("category", "general"),
+        }
+        if odoo_draft:
+            body_data["odoo_invoice_id"] = odoo_draft["id"]
+
         return self.draft_manager.create_draft(
             domain="accounting",
             title=title,
-            body=json.dumps({
-                "type": "draft_entry",
-                "description": task_data.get("body", title),
-                "amount": task_data.get("amount", 0),
-                "category": task_data.get("category", "general"),
-            }, indent=2),
+            body=json.dumps(body_data, indent=2),
             author=self.AGENT_NAME,
         )
 
+    def triage_inbox(self) -> list:
+        """Triage email inbox via IMAP - creates task files for unread messages.
+
+        Returns:
+            List of created task file paths.
+        """
+        if not self.settings.has_imap:
+            self._log_action("triage_skip", "IMAP credentials not configured")
+            return []
+
+        if self._email_reader is None:
+            from Platinum.src.email_client import EmailReader
+            self._email_reader = EmailReader(self.settings)
+
+        try:
+            created = self._email_reader.triage_inbox()
+            self._log_action("triage", f"Created {len(created)} email tasks from inbox")
+            return created
+        except Exception as e:
+            self._log_action("triage_error", f"Inbox triage failed: {e}")
+            return []
+
     def run_once(self) -> list:
-        """Single iteration: scan, claim, draft, submit. Returns list of draft IDs."""
+        """Single iteration: triage inbox, scan, claim, draft, submit. Returns list of draft IDs."""
         self.heartbeat.beat()
         draft_ids = []
+
+        # Triage email inbox first
+        self.triage_inbox()
 
         available = self.scan_needs_action()
         self._log_action("scan", f"Found {len(available)} available tasks")

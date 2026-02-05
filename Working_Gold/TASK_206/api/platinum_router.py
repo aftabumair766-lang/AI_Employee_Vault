@@ -15,6 +15,7 @@ Endpoints:
     GET    /api/v1/platinum/audit           - Audit log
 """
 
+import os
 import json
 from datetime import datetime
 from pathlib import Path
@@ -30,8 +31,11 @@ from api.database import (
 
 router = APIRouter(prefix="/api/v1/platinum", tags=["Platinum"])
 
-# Vault path for file-based operations
-VAULT_PATH = Path(__file__).parent.parent.parent.parent
+# Vault path for file-based operations (uses config if available)
+VAULT_PATH = Path(os.environ.get(
+    "PLATINUM_VAULT_PATH",
+    str(Path(__file__).parent.parent.parent.parent)
+))
 
 
 # ========== SCHEMAS ==========
@@ -335,3 +339,32 @@ async def get_audit_log(limit: int = 50, db: Session = Depends(get_db)):
         }
         for e in entries
     ]
+
+
+@router.get("/health")
+async def get_health_status():
+    """Get system health status from HealthMonitor."""
+    try:
+        from Platinum.src.config import get_settings
+        from Platinum.src.health_monitor import HealthMonitor
+
+        settings = get_settings(VAULT_PATH=str(VAULT_PATH))
+        monitor = HealthMonitor(settings)
+        status = monitor.run_checks()
+        return monitor.get_status_dict(status)
+    except ImportError:
+        # Fallback if Platinum modules not available
+        return {
+            "overall_healthy": True,
+            "checks": [],
+            "alerts": [],
+            "timestamp": datetime.utcnow().isoformat(),
+            "note": "HealthMonitor not available",
+        }
+    except Exception as e:
+        return {
+            "overall_healthy": False,
+            "checks": [],
+            "alerts": [f"Health check error: {str(e)}"],
+            "timestamp": datetime.utcnow().isoformat(),
+        }

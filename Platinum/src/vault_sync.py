@@ -42,18 +42,23 @@ class SyncResult:
 class VaultSync:
     """Git-based vault synchronization between agents."""
 
-    def __init__(self, vault_path: str, remote: str = "origin", branch: str = "main"):
+    def __init__(self, vault_path: str, remote: str = "origin", branch: str = "main",
+                 ssh_key: str = ""):
         self.vault_path = Path(vault_path)
         self.remote = remote
         self.branch = branch
+        self.ssh_key = ssh_key
         self._sync_log: List[dict] = []
 
     def _run_git(self, *args) -> tuple:
         """Run a git command and return (returncode, stdout, stderr)."""
         cmd = ["git", "-C", str(self.vault_path)] + list(args)
+        env = os.environ.copy()
+        if self.ssh_key:
+            env["GIT_SSH_COMMAND"] = f'ssh -i "{self.ssh_key}" -o StrictHostKeyChecking=no'
         try:
             result = subprocess.run(
-                cmd, capture_output=True, text=True, timeout=30
+                cmd, capture_output=True, text=True, timeout=30, env=env
             )
             return result.returncode, result.stdout.strip(), result.stderr.strip()
         except subprocess.TimeoutExpired:

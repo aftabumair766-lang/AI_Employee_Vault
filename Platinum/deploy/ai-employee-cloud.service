@@ -1,0 +1,28 @@
+[Unit]
+Description=AI Employee Cloud Agent (Platinum Tier)
+Documentation=https://github.com/yourusername/AI_Employee_vault
+After=docker.service network-online.target
+Requires=docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/ai-employee
+ExecStart=/usr/bin/docker compose -f docker-compose.cloud.yml up -d
+ExecStop=/usr/bin/docker compose -f docker-compose.cloud.yml down
+ExecReload=/usr/bin/docker compose -f docker-compose.cloud.yml restart
+TimeoutStartSec=300
+
+# Restart policy
+Restart=on-failure
+RestartSec=30
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/ai-employee
+
+[Install]
+WantedBy=multi-user.target

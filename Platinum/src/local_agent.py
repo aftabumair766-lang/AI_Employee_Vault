@@ -26,6 +26,7 @@ from Platinum.src.vault_sync import VaultSync
 from Platinum.src.draft_manager import DraftManager, Draft
 from Platinum.src.agent_heartbeat import AgentHeartbeat
 from Platinum.src.secret_guard import SecretGuard
+from Platinum.src.config import get_settings
 
 logger = logging.getLogger("platinum.local_agent")
 
@@ -35,15 +36,24 @@ class LocalAgent:
 
     AGENT_NAME = "local"
 
-    def __init__(self, vault_path: str):
-        self.vault_path = Path(vault_path)
-        self.vault_sync = VaultSync(str(vault_path))
-        self.draft_manager = DraftManager(str(vault_path))
-        self.heartbeat = AgentHeartbeat(self.AGENT_NAME, str(vault_path), interval=30)
+    def __init__(self, vault_path: str = None, settings=None):
+        self.settings = settings or get_settings(AGENT_ROLE="local")
+        self.vault_path = Path(vault_path) if vault_path else self.settings.vault
+        self.vault_sync = VaultSync(
+            str(self.vault_path),
+            remote=self.settings.GIT_REMOTE,
+            branch=self.settings.GIT_BRANCH,
+        )
+        self.draft_manager = DraftManager(str(self.vault_path))
+        self.heartbeat = AgentHeartbeat(
+            self.AGENT_NAME, str(self.vault_path),
+            interval=self.settings.HEARTBEAT_INTERVAL,
+        )
         self.secret_guard = SecretGuard(agent_role="local")  # Full access
         self._running = False
         self._log: list = []
         self._executed_actions: list = []
+        self._email_sender = None
 
     def _log_action(self, action: str, details: str):
         entry = {
@@ -117,18 +127,30 @@ class LocalAgent:
         }
 
         if draft.domain == "email":
-            # Simulated email send (would use SMTP with secrets in production)
-            action_record["details"] = f"Email sent: {draft.title}"
+            # Real email send via SMTP (if configured)
+            sent = self._send_email(draft)
+            if sent:
+                action_record["details"] = f"Email sent via SMTP: {draft.title}"
+            else:
+                action_record["details"] = f"Email send (simulated): {draft.title}"
             self._log_action("executed", f"Sent email: {draft.title}")
 
         elif draft.domain == "social":
-            # Simulated social post (would use API with tokens in production)
-            action_record["details"] = f"Social post published: {draft.title}"
+            # Social post via API (if configured)
+            posted = self._post_social(draft)
+            if posted:
+                action_record["details"] = f"Social post published via API: {draft.title}"
+            else:
+                action_record["details"] = f"Social post (simulated): {draft.title}"
             self._log_action("executed", f"Published social post: {draft.title}")
 
         elif draft.domain == "accounting":
-            # Simulated accounting entry
-            action_record["details"] = f"Accounting entry recorded: {draft.title}"
+            # Try to confirm Odoo invoice if present
+            confirmed = self._confirm_odoo_invoice(draft)
+            if confirmed:
+                action_record["details"] = f"Accounting entry confirmed in Odoo: {draft.title}"
+            else:
+                action_record["details"] = f"Accounting entry recorded: {draft.title}"
             self._log_action("executed", f"Recorded accounting entry: {draft.title}")
 
         else:
@@ -212,6 +234,62 @@ class LocalAgent:
             self.update_dashboard()
 
         return approved
+
+    def _send_email(self, draft: Draft) -> bool:
+        """Send email via SMTP using real EmailSender if configured."""
+        if not self.settings.has_smtp:
+            return False
+        try:
+            if self._email_sender is None:
+                from Platinum.src.email_client import EmailSender
+                self._email_sender = EmailSender(self.settings)
+            # Parse draft body for email metadata
+            draft_data = {"to": "", "subject": draft.title, "body": draft.body}
+            try:
+                body_data = json.loads(draft.body)
+                if isinstance(body_data, dict):
+                    draft_data.update(body_data)
+            except (json.JSONDecodeError, TypeError):
+                pass
+            if draft_data.get("to"):
+                return self._email_sender.send_draft(draft_data)
+        except Exception as e:
+            self._log_action("email_error", f"SMTP send failed: {e}")
+        return False
+
+    def _post_social(self, draft: Draft) -> bool:
+        """Post to social media using SocialPoster if configured."""
+        if not self.settings.has_twitter:
+            return False
+        try:
+            from Platinum.src.social_client import SocialPoster
+            poster = SocialPoster(self.settings)
+            return poster.post(draft.body)
+        except Exception as e:
+            self._log_action("social_error", f"Social post failed: {e}")
+        return False
+
+    def _confirm_odoo_invoice(self, draft: Draft) -> bool:
+        """Confirm Odoo invoice if present in draft body."""
+        if not self.settings.has_odoo:
+            return False
+        try:
+            body_data = json.loads(draft.body)
+            invoice_id = body_data.get("odoo_invoice_id")
+            if not invoice_id:
+                return False
+            from Platinum.src.odoo_client import OdooClient
+            client = OdooClient(self.settings)
+            if client.connect():
+                result = client.confirm_invoice(invoice_id)
+                if result:
+                    self._log_action("odoo_confirm", f"Confirmed Odoo invoice: {invoice_id}")
+                return result
+        except (json.JSONDecodeError, TypeError):
+            pass
+        except Exception as e:
+            self._log_action("odoo_error", f"Odoo confirm failed: {e}")
+        return False
 
     def get_log(self) -> list:
         return self._log.copy()

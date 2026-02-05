@@ -1,0 +1,41 @@
+# AI Employee Cloud Agent Docker Image
+# Based on Python 3.11 slim for minimal footprint
+
+FROM python:3.11-slim
+
+LABEL maintainer="AI Employee <noreply@example.com>"
+LABEL description="Platinum Tier Cloud Agent"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    openssh-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /opt/ai-employee
+
+# Copy requirements and install Python dependencies
+COPY ../requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the Platinum source code
+COPY ../src/ ./Platinum/src/
+COPY ../tests/ ./Platinum/tests/
+COPY ../__init__.py ./Platinum/__init__.py
+
+# Create vault directory
+RUN mkdir -p /opt/ai-employee/vault/Platinum/{Needs_Action,Pending_Approval,In_Progress,Done,Plans,Updates,Logs,Signals}/{email,social,accounting,monitoring}
+
+# Set environment variables
+ENV PYTHONPATH=/opt/ai-employee
+ENV PYTHONUNBUFFERED=1
+ENV PLATINUM_AGENT_ROLE=cloud
+ENV PLATINUM_VAULT_PATH=/opt/ai-employee/vault
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "from Platinum.src.agent_heartbeat import AgentHeartbeat; print('ok')" || exit 1
+
+# Default command: run the Cloud Agent
+CMD ["python", "-c", "from Platinum.src.cloud_agent import CloudAgent; agent = CloudAgent(); agent.start()"]
