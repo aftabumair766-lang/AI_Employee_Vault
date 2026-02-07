@@ -1,0 +1,10 @@
+{
+  "task_id": "DEMO-194623",
+  "domain": "email",
+  "title": "Invoice #1234 - Payment Confirmation",
+  "body": "Dear team, please confirm payment for invoice #1234. Amount: $5,000. Due: Feb 15.",
+  "status": "claimed",
+  "created_at": "2026-02-05T19:46:23.561793",
+  "owner": "cloud",
+  "claimed_at": "2026-02-05T19:46:23.585127"
+}

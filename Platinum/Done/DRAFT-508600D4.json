@@ -1,0 +1,29 @@
+{
+  "draft_id": "DRAFT-508600D4",
+  "domain": "email",
+  "title": "Re: Invoice #1234 - Payment Confirmation",
+  "body": "Thank you for your message regarding 'Invoice #1234 - Payment Confirmation'.\n\nWe have reviewed your request and will respond shortly.\n\nOriginal: Dear team, please confirm payment for invoice #1234. Amount: $5,000. Due: Feb 15.",
+  "status": "approved",
+  "author": "cloud",
+  "approver": "local",
+  "reject_reason": null,
+  "created_at": "2026-02-05T19:46:23.599782",
+  "updated_at": "2026-02-05T19:46:23.636921",
+  "audit_trail": [
+    {
+      "action": "created",
+      "agent": "cloud",
+      "timestamp": "2026-02-05T19:46:23.599782"
+    },
+    {
+      "action": "submitted_for_approval",
+      "agent": "cloud",
+      "timestamp": "2026-02-05T19:46:23.610944"
+    },
+    {
+      "action": "approved",
+      "agent": "local",
+      "timestamp": "2026-02-05T19:46:23.636921"
+    }
+  ]
+}
