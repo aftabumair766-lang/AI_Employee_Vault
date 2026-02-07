@@ -1,0 +1,101 @@
+{
+  "demo_run": "2026-02-07T16:58:15.624836",
+  "task_id": "DEMO-165815",
+  "draft_id": "DRAFT-F97E7E5D",
+  "steps_completed": 7,
+  "steps": [
+    {
+      "step": 1,
+      "description": "Email task created in Needs_Action/email/",
+      "details": "Task ID: DEMO-165815",
+      "timestamp": "2026-02-07T16:58:15.577817"
+    },
+    {
+      "step": 2,
+      "description": "Cloud Agent scanned Needs_Action/",
+      "details": "Found 1 tasks",
+      "timestamp": "2026-02-07T16:58:15.591324"
+    },
+    {
+      "step": 3,
+      "description": "Cloud Agent claimed task and drafted reply",
+      "details": "Draft ID: DRAFT-F97E7E5D",
+      "timestamp": "2026-02-07T16:58:15.602498"
+    },
+    {
+      "step": 4,
+      "description": "Draft submitted to Pending_Approval/",
+      "details": "Pending drafts: 1",
+      "timestamp": "2026-02-07T16:58:15.612200"
+    },
+    {
+      "step": 5,
+      "description": "Local Agent reviewed and approved",
+      "details": "Approved: ['DRAFT-F97E7E5D']",
+      "timestamp": "2026-02-07T16:58:15.624636"
+    },
+    {
+      "step": 6,
+      "description": "Local Agent executed send (simulated)",
+      "details": "Actions: 1",
+      "timestamp": "2026-02-07T16:58:15.624659"
+    },
+    {
+      "step": 7,
+      "description": "Audit trail recorded",
+      "details": "Total entries: 8",
+      "timestamp": "2026-02-07T16:58:15.624675"
+    }
+  ],
+  "audit_trail": [
+    {
+      "agent": "cloud",
+      "action": "claimed",
+      "details": "Claimed Needs_Action/email/DEMO-165815.json",
+      "timestamp": "2026-02-07T16:58:15.593972"
+    },
+    {
+      "agent": "cloud",
+      "action": "drafted",
+      "details": "Created draft DRAFT-F97E7E5D for email",
+      "timestamp": "2026-02-07T16:58:15.596537"
+    },
+    {
+      "agent": "cloud",
+      "action": "submitted",
+      "details": "Draft DRAFT-F97E7E5D submitted for approval",
+      "timestamp": "2026-02-07T16:58:15.602340"
+    },
+    {
+      "agent": "local",
+      "action": "review",
+      "details": "Found 1 pending drafts",
+      "timestamp": "2026-02-07T16:58:15.612035"
+    },
+    {
+      "agent": "local",
+      "action": "review",
+      "details": "Found 1 pending drafts",
+      "timestamp": "2026-02-07T16:58:15.614725"
+    },
+    {
+      "agent": "local",
+      "action": "approved",
+      "details": "Approved draft DRAFT-F97E7E5D",
+      "timestamp": "2026-02-07T16:58:15.618786"
+    },
+    {
+      "agent": "local",
+      "action": "executed",
+      "details": "Sent email: Re: Invoice #1234 - Payment Confirmation",
+      "timestamp": "2026-02-07T16:58:15.619805"
+    },
+    {
+      "agent": "local",
+      "action": "dashboard",
+      "details": "Dashboard updated",
+      "timestamp": "2026-02-07T16:58:15.624467"
+    }
+  ],
+  "secret_guard_verified": true
+}

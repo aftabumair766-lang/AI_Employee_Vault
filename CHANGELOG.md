@@ -4,6 +4,51 @@ All notable changes to the AI Employee Vault project.
 
 ---
 
+## [3.2.0] - 2026-02-07
+
+### Added
+- **TASK_214**: Configuration Layer + Gmail Email Integration
+  - PlatinumSettings centralized config with pydantic-settings and .env support
+  - EmailReader (IMAP) for Cloud Agent inbox triage
+  - EmailSender (SMTP) for Local Agent email dispatch
+- **TASK_215**: Social Media + WhatsApp/Banking Stubs
+  - SocialDrafter (Cloud) + SocialPoster (Local, Twitter/X API)
+  - WhatsApp ABC interface + stub (Local only)
+  - Banking ABC interface + stub (Local only)
+- **TASK_216**: Health Monitoring Daemon
+  - HealthMonitor with API, Odoo, Cloud VM, and heartbeat checks
+  - Standalone daemon with signal handling
+  - GET /api/v1/platinum/health endpoint
+- **TASK_217**: Odoo Community Integration
+  - OdooClient with XML-RPC (draft invoices/payments)
+  - Cloud: create_draft_invoice, create_draft_payment (draft-only)
+  - Local only: confirm_invoice, confirm_payment
+  - Docker Compose for Odoo 17 + PostgreSQL 15
+- **TASK_218**: Cloud VM Deployment + Live Vault Sync
+  - docker-compose.cloud.yml (Agent + Monitor + Odoo + Caddy)
+  - Dockerfile.cloud, Caddyfile, systemd service
+  - setup-cloud-vm.sh for Oracle Cloud Free Tier
+  - SyncDaemon with SSH key support
+  - CLOUD_SETUP_GUIDE.md step-by-step manual
+- **TASK_219**: A2A Interface Definitions
+  - A2AMessage dataclass with TTL support
+  - A2ATransport ABC for pluggable transports
+  - FileBasedTransport using Platinum/Signals/
+- **TASK_220-225**: Constitutional Compliance Completion
+  - SELF_ASSESSMENT.md (Article IX compliance)
+  - Odoo MCP wrapper (Section 10.5.2 compliance)
+  - Full Section 10.6 demo with real directory flow
+  - Updated CHANGELOG, DECISIONS, REQUESTS, RESPONSES
+
+### Changed
+- **DECISIONS.md**: Added ADR-008 through ADR-013 (6 Platinum decisions)
+- **REQUESTS.md**: Added Platinum Level Requests section
+- **RESPONSES.md**: Added Platinum Level Responses section
+- **TASKS_Platinum.md**: Updated with TASK_220-225
+- **DASHBOARD_Platinum.md**: Updated with final metrics
+
+---
+
 ## [3.1.0] - 2026-02-04
 
 ### Added
