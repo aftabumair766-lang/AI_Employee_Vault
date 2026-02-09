@@ -8,10 +8,10 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-WorkingDirectory=/opt/ai-employee
-ExecStart=/usr/bin/docker compose -f docker-compose.cloud.yml up -d
-ExecStop=/usr/bin/docker compose -f docker-compose.cloud.yml down
-ExecReload=/usr/bin/docker compose -f docker-compose.cloud.yml restart
+WorkingDirectory=/opt/ai-employee/vault
+ExecStart=/usr/bin/docker compose -f Platinum/deploy/docker-compose.cloud.yml up -d
+ExecStop=/usr/bin/docker compose -f Platinum/deploy/docker-compose.cloud.yml down
+ExecReload=/usr/bin/docker compose -f Platinum/deploy/docker-compose.cloud.yml restart
 TimeoutStartSec=300
 
 # Restart policy

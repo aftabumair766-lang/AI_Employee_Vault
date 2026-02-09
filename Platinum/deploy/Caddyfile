@@ -1,9 +1,38 @@
 # Caddy reverse proxy configuration for AI Employee
-# Provides HTTPS termination for Odoo and optional API
+# Provides HTTPS termination for API and Odoo
+#
+# Set DOMAIN env var or defaults to :80 (HTTP only, no HTTPS)
+# Examples:
+#   DOMAIN=your-domain.com  -> auto HTTPS via Let's Encrypt
+#   DOMAIN=:80              -> HTTP only (dev/testing)
 
-# Replace with your actual domain or use localhost for testing
-{$DOMAIN:localhost} {
-    # Odoo web interface
+{$DOMAIN::80} {
+    # API endpoints -> FastAPI on port 8000
+    handle /health {
+        reverse_proxy api:8000
+    }
+
+    handle /docs* {
+        reverse_proxy api:8000
+    }
+
+    handle /openapi.json {
+        reverse_proxy api:8000
+    }
+
+    handle /redoc* {
+        reverse_proxy api:8000
+    }
+
+    handle /api/* {
+        reverse_proxy api:8000
+    }
+
+    handle /dashboard {
+        reverse_proxy api:8000
+    }
+
+    # Odoo web interface (everything else)
     handle /web/* {
         reverse_proxy odoo:8069
     }
@@ -16,9 +45,13 @@
         reverse_proxy odoo:8069
     }
 
-    # Default to Odoo
-    handle {
+    handle /odoo/* {
         reverse_proxy odoo:8069
+    }
+
+    # Default: root goes to API info, /odoo for Odoo
+    handle {
+        reverse_proxy api:8000
     }
 
     # Security headers
@@ -35,7 +68,7 @@
     }
 }
 
-# Health check endpoint (optional, for monitoring)
+# Internal health check endpoint for monitoring
 :8080 {
     respond /health "OK" 200
 }

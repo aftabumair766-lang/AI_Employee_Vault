@@ -1,10 +1,13 @@
 # AI Employee Cloud Agent Docker Image
 # Based on Python 3.11 slim for minimal footprint
+#
+# Build context: repository root (AI_Employee_Vault/)
+# Usage: docker build -f Platinum/deploy/Dockerfile.cloud .
 
 FROM python:3.11-slim
 
 LABEL maintainer="AI Employee <noreply@example.com>"
-LABEL description="Platinum Tier Cloud Agent"
+LABEL description="Platinum Tier Cloud Agent + API Server"
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -16,15 +19,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /opt/ai-employee
 
 # Copy requirements and install Python dependencies
-COPY ../requirements.txt ./requirements.txt
+COPY Platinum/requirements-docker.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the Platinum source code
-COPY ../src/ ./Platinum/src/
-COPY ../tests/ ./Platinum/tests/
-COPY ../__init__.py ./Platinum/__init__.py
+# Copy the Platinum package (source code + __init__.py)
+COPY Platinum/__init__.py ./Platinum/__init__.py
+COPY Platinum/src/ ./Platinum/src/
 
-# Create vault directory
+# Copy the API code from Working_Gold/TASK_206
+COPY Working_Gold/TASK_206/api/ ./api/
+
+# Create vault directory structure
 RUN mkdir -p /opt/ai-employee/vault/Platinum/{Needs_Action,Pending_Approval,In_Progress,Done,Plans,Updates,Logs,Signals}/{email,social,accounting,monitoring}
 
 # Set environment variables
@@ -33,9 +38,12 @@ ENV PYTHONUNBUFFERED=1
 ENV PLATINUM_AGENT_ROLE=cloud
 ENV PLATINUM_VAULT_PATH=/opt/ai-employee/vault
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "from Platinum.src.agent_heartbeat import AgentHeartbeat; print('ok')" || exit 1
+# Expose API port
+EXPOSE 8000
+
+# Health check via API endpoint
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
 
 # Default command: run the Cloud Agent
 CMD ["python", "-c", "from Platinum.src.cloud_agent import CloudAgent; agent = CloudAgent(); agent.start()"]

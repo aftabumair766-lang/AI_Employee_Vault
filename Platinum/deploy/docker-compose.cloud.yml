@@ -2,30 +2,65 @@
 # Oracle Cloud Always Free VM (ARM, 2GB+ RAM recommended)
 #
 # Usage:
-#   docker compose -f docker-compose.cloud.yml up -d
+#   cd /opt/ai-employee/vault   (or repo root)
+#   docker compose -f Platinum/deploy/docker-compose.cloud.yml up -d
+#
+# Build context is the repo root so Dockerfile can COPY from both
+# Platinum/ and Working_Gold/TASK_206/api/.
 #
 # Services:
-#   - cloud-agent: The always-on Cloud Agent
+#   - api:            FastAPI server (port 8000)
+#   - cloud-agent:    Always-on Cloud Agent (claims, drafts, triages)
 #   - health-monitor: Health monitoring daemon
-#   - odoo: Odoo Community 17.0
-#   - odoo-db: PostgreSQL 15 for Odoo
-#   - caddy: HTTPS reverse proxy
-
-version: "3.8"
+#   - sync-daemon:    Git vault sync daemon
+#   - odoo-db:        PostgreSQL 15 for Odoo
+#   - odoo:           Odoo Community 17.0
+#   - caddy:          HTTPS reverse proxy
 
 services:
+  # === FastAPI Server ===
+  api:
+    build:
+      context: ../..
+      dockerfile: Platinum/deploy/Dockerfile.cloud
+    container_name: ai-employee-api
+    command: ["python", "-m", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    env_file:
+      - ../.env
+    environment:
+      - PLATINUM_AGENT_ROLE=cloud
+      - PLATINUM_VAULT_PATH=/opt/ai-employee/vault
+      - PLATINUM_ODOO_URL=http://odoo:8069
+      - PLATINUM_ODOO_DB=odoo
+      - PLATINUM_ODOO_USER=${PLATINUM_ODOO_USER:-admin}
+      - PLATINUM_ODOO_PASSWORD=${PLATINUM_ODOO_PASSWORD:-admin}
+      - PLATINUM_DATABASE_URL=sqlite:///./ai_employee.db
+    ports:
+      - "8000:8000"
+    volumes:
+      - vault-data:/opt/ai-employee/vault
+    networks:
+      - ai-employee-net
+    depends_on:
+      - odoo
+    restart: unless-stopped
+
+  # === Cloud Agent (background worker) ===
   cloud-agent:
     build:
-      context: ..
-      dockerfile: deploy/Dockerfile.cloud
+      context: ../..
+      dockerfile: Platinum/deploy/Dockerfile.cloud
     container_name: ai-employee-cloud-agent
+    command: ["python", "-c", "from Platinum.src.cloud_agent import CloudAgent; agent = CloudAgent(); agent.start()"]
+    env_file:
+      - ../.env
     environment:
       - PLATINUM_AGENT_ROLE=cloud
       - PLATINUM_VAULT_PATH=/opt/ai-employee/vault
       - PLATINUM_IMAP_HOST=${PLATINUM_IMAP_HOST:-imap.gmail.com}
       - PLATINUM_IMAP_PORT=${PLATINUM_IMAP_PORT:-993}
-      - PLATINUM_IMAP_USER=${PLATINUM_IMAP_USER}
-      - PLATINUM_IMAP_PASSWORD=${PLATINUM_IMAP_PASSWORD}
+      - PLATINUM_IMAP_USER=${PLATINUM_IMAP_USER:-}
+      - PLATINUM_IMAP_PASSWORD=${PLATINUM_IMAP_PASSWORD:-}
       - PLATINUM_ODOO_URL=http://odoo:8069
       - PLATINUM_ODOO_DB=odoo
       - PLATINUM_ODOO_USER=${PLATINUM_ODOO_USER:-admin}
@@ -44,32 +79,38 @@ services:
       - odoo
     restart: unless-stopped
 
+  # === Health Monitor Daemon ===
   health-monitor:
     build:
-      context: ..
-      dockerfile: deploy/Dockerfile.cloud
+      context: ../..
+      dockerfile: Platinum/deploy/Dockerfile.cloud
     container_name: ai-employee-health-monitor
     command: ["python", "-m", "Platinum.src.health_monitor_daemon"]
+    env_file:
+      - ../.env
     environment:
       - PLATINUM_AGENT_ROLE=cloud
       - PLATINUM_VAULT_PATH=/opt/ai-employee/vault
       - PLATINUM_HEALTH_CHECK_INTERVAL=${PLATINUM_HEALTH_CHECK_INTERVAL:-60}
-      - PLATINUM_HEALTH_API_URL=http://cloud-agent:8000
+      - PLATINUM_HEALTH_API_URL=http://api:8000
       - PLATINUM_ODOO_URL=http://odoo:8069
     volumes:
       - vault-data:/opt/ai-employee/vault
     networks:
       - ai-employee-net
     depends_on:
-      - cloud-agent
+      - api
     restart: unless-stopped
 
+  # === Sync Daemon (git push/pull) ===
   sync-daemon:
     build:
-      context: ..
-      dockerfile: deploy/Dockerfile.cloud
+      context: ../..
+      dockerfile: Platinum/deploy/Dockerfile.cloud
     container_name: ai-employee-sync-daemon
     command: ["python", "-m", "Platinum.src.sync_daemon"]
+    env_file:
+      - ../.env
     environment:
       - PLATINUM_VAULT_PATH=/opt/ai-employee/vault
       - PLATINUM_GIT_REMOTE=origin
@@ -83,6 +124,7 @@ services:
       - ai-employee-net
     restart: unless-stopped
 
+  # === PostgreSQL for Odoo ===
   odoo-db:
     image: postgres:15
     container_name: ai-employee-odoo-db
@@ -96,6 +138,7 @@ services:
       - ai-employee-net
     restart: unless-stopped
 
+  # === Odoo Community 17.0 ===
   odoo:
     image: odoo:17.0
     container_name: ai-employee-odoo
@@ -112,6 +155,7 @@ services:
       - ai-employee-net
     restart: unless-stopped
 
+  # === Caddy (HTTPS reverse proxy) ===
   caddy:
     image: caddy:2-alpine
     container_name: ai-employee-caddy
@@ -125,6 +169,7 @@ services:
     networks:
       - ai-employee-net
     depends_on:
+      - api
       - odoo
     restart: unless-stopped
 

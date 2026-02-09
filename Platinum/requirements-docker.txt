@@ -1,0 +1,37 @@
+# Consolidated dependencies for Platinum Docker image
+# Merges Working_Gold/TASK_206 + Platinum requirements
+
+# === FastAPI Stack ===
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+httpx==0.26.0
+
+# === Pydantic ===
+pydantic>=2.5.3
+pydantic-settings>=2.0.0
+
+# === Database ===
+sqlalchemy==2.0.25
+aiosqlite==0.19.0
+
+# === Templates & Dashboard ===
+jinja2==3.1.3
+
+# === Security ===
+cryptography>=41.0.0
+zstandard>=0.21.0
+
+# === Monitoring ===
+prometheus-client==0.19.0
+psutil==5.9.7
+
+# === File Watching ===
+watchdog>=3.0.0
+
+# === HTTP / Social ===
+requests>=2.31.0
+requests-oauthlib>=1.3.0
+
+# === Our PyPI package (security skills) ===
+ai-employee-security-skills==1.0.0
