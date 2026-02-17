@@ -72,8 +72,10 @@ RUN mkdir -p /opt/ai-employee/vault/Platinum/{Needs_Action,Pending_Approval,In_P
 # Create Odoo data directory
 RUN mkdir -p /var/lib/odoo && chown -R odoo:odoo /var/lib/odoo 2>/dev/null || true
 
-# Ensure PostgreSQL run directory exists
-RUN mkdir -p /var/run/postgresql && chown postgres:postgres /var/run/postgresql
+# Ensure PostgreSQL directories exist
+RUN mkdir -p /var/run/postgresql /var/log/postgresql \
+    && chown postgres:postgres /var/run/postgresql /var/log/postgresql \
+    && chmod 775 /var/run/postgresql
 
 # --- Environment Variables ---
 ENV PYTHONPATH=/opt/ai-employee
