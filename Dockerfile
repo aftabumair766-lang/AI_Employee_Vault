@@ -4,7 +4,7 @@
 #
 # Build context: repository root (AI_Employee_Vault/)
 
-FROM python:3.11-slim
+FROM python:3.11-slim-bookworm
 
 LABEL maintainer="AI Employee <noreply@example.com>"
 LABEL description="AI Employee Vault - all-in-one deployment (API + Odoo + PostgreSQL)"
