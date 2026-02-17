@@ -1,6 +1,6 @@
-# AI Employee - Render.com Deployment (Single Container)
+# AI Employee - Cloud Deployment (Single Container)
 # All services run under supervisord in one container
-# (Render free tier = 1 web service only)
+# Works on: HuggingFace Spaces, Render, Koyeb, Railway, etc.
 #
 # Build context: repository root (AI_Employee_Vault/)
 # Usage: docker build -f Platinum/deploy/Dockerfile.render .
@@ -8,7 +8,7 @@
 FROM python:3.11-slim
 
 LABEL maintainer="AI Employee <noreply@example.com>"
-LABEL description="AI Employee Vault - Render.com single-container deployment"
+LABEL description="AI Employee Vault - single-container cloud deployment"
 
 # Install system dependencies + supervisor
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -43,12 +43,13 @@ ENV PYTHONUNBUFFERED=1
 ENV PLATINUM_AGENT_ROLE=cloud
 ENV PLATINUM_VAULT_PATH=/opt/ai-employee/vault
 
-# Render assigns PORT dynamically (default 8000 for local testing)
-ENV PORT=8000
+# PORT: HF Spaces=7860, Render/Koyeb=dynamic (overridden at runtime)
+ENV PORT=7860
+EXPOSE 7860
 
 # Health check via API endpoint
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-    CMD python -c "import urllib.request, os; urllib.request.urlopen(f'http://localhost:{os.environ.get(\"PORT\", 8000)}/health')" || exit 1
+    CMD python -c "import urllib.request, os; urllib.request.urlopen(f'http://localhost:{os.environ.get(\"PORT\", 7860)}/health')" || exit 1
 
 # Run all services via supervisord
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]
