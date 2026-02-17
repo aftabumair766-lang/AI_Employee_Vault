@@ -1,0 +1,55 @@
+# AI Employee - Cloud Deployment (Single Container)
+# All services run under supervisord in one container
+# Works on: HuggingFace Spaces, Render, Koyeb, Railway, etc.
+#
+# Build context: repository root (AI_Employee_Vault/)
+# Usage: docker build -f Platinum/deploy/Dockerfile.render .
+
+FROM python:3.11-slim
+
+LABEL maintainer="AI Employee <noreply@example.com>"
+LABEL description="AI Employee Vault - single-container cloud deployment"
+
+# Install system dependencies + supervisor
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    openssh-client \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /opt/ai-employee
+
+# Copy requirements and install Python dependencies
+COPY Platinum/requirements-docker.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the Platinum package (source code + __init__.py)
+COPY Platinum/__init__.py ./Platinum/__init__.py
+COPY Platinum/src/ ./Platinum/src/
+
+# Copy the API code from Working_Gold/TASK_206
+COPY Working_Gold/TASK_206/api/ ./api/
+
+# Copy supervisord config
+COPY Platinum/deploy/supervisord.conf /etc/supervisord.conf
+
+# Create vault directory structure
+RUN mkdir -p /opt/ai-employee/vault/Platinum/{Needs_Action,Pending_Approval,In_Progress,Done,Plans,Updates,Logs,Signals}/{email,social,accounting,monitoring}
+
+# Set environment variables
+ENV PYTHONPATH=/opt/ai-employee
+ENV PYTHONUNBUFFERED=1
+ENV PLATINUM_AGENT_ROLE=cloud
+ENV PLATINUM_VAULT_PATH=/opt/ai-employee/vault
+
+# PORT: HF Spaces=7860, Render/Koyeb=dynamic (overridden at runtime)
+ENV PORT=7860
+EXPOSE 7860
+
+# Health check via API endpoint
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD python -c "import urllib.request, os; urllib.request.urlopen(f'http://localhost:{os.environ.get(\"PORT\", 7860)}/health')" || exit 1
+
+# Run all services via supervisord
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]
