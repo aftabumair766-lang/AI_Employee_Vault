@@ -5,6 +5,7 @@ set -e
 PGDATA="/var/lib/postgresql/15/main"
 PGRUN="/var/run/postgresql"
 PGLOG="/var/log/postgresql"
+ODOO_INIT_FLAG="/var/lib/odoo/.initialized"
 
 echo "[entrypoint] Initializing AI Employee (all-in-one mode)..."
 
@@ -35,33 +36,7 @@ host    all       all       ::1/128       md5
 PGHBA
 chown postgres:postgres "$PGDATA/pg_hba.conf"
 
-# Ensure postgresql.conf has correct settings for our setup
-cat > "$PGDATA/conf.d/hf.conf" 2>/dev/null <<'PGCONF' || true
-listen_addresses = 'localhost'
-port = 5432
-max_connections = 50
-shared_buffers = 128MB
-unix_socket_directories = '/var/run/postgresql'
-logging_collector = off
-PGCONF
-# If conf.d doesn't exist, append to postgresql.conf directly
-if [ ! -d "$PGDATA/conf.d" ]; then
-    mkdir -p "$PGDATA/conf.d"
-    chown postgres:postgres "$PGDATA/conf.d"
-    # Ensure include_dir is set
-    grep -q "include_dir" "$PGDATA/postgresql.conf" || echo "include_dir = 'conf.d'" >> "$PGDATA/postgresql.conf"
-    cat > "$PGDATA/conf.d/hf.conf" <<'PGCONF'
-listen_addresses = 'localhost'
-port = 5432
-max_connections = 50
-shared_buffers = 128MB
-unix_socket_directories = '/var/run/postgresql'
-logging_collector = off
-PGCONF
-    chown postgres:postgres "$PGDATA/conf.d/hf.conf"
-fi
-
-# Start PostgreSQL temporarily to create odoo user/db
+# Start PostgreSQL temporarily for setup
 echo "[entrypoint] Starting PostgreSQL for initial setup..."
 su -s /bin/bash postgres -c "/usr/lib/postgresql/15/bin/pg_ctl -D $PGDATA -l $PGLOG/startup.log start -w -t 60"
 
@@ -71,14 +46,24 @@ echo "[entrypoint] PostgreSQL started. Setting up Odoo database..."
 su -s /bin/bash postgres -c "psql -tc \"SELECT 1 FROM pg_roles WHERE rolname='odoo'\" | grep -q 1 || psql -c \"CREATE ROLE odoo WITH LOGIN PASSWORD 'odoo' CREATEDB;\""
 su -s /bin/bash postgres -c "psql -tc \"SELECT 1 FROM pg_database WHERE datname='odoo'\" | grep -q 1 || psql -c \"CREATE DATABASE odoo OWNER odoo ENCODING 'UTF8' TEMPLATE template0;\""
 
+# --- Odoo initialization (first run only) ---
+mkdir -p /var/lib/odoo
+chown -R odoo:odoo /var/lib/odoo 2>/dev/null || true
+
+if [ ! -f "$ODOO_INIT_FLAG" ]; then
+    echo "[entrypoint] Initializing Odoo base module (first run, this takes a while)..."
+    su -s /bin/bash odoo -c "/usr/bin/odoo --config=/etc/odoo/odoo.conf -i base --stop-after-init --no-http" || {
+        echo "[entrypoint] WARNING: Odoo base init failed, will retry on service start"
+    }
+    touch "$ODOO_INIT_FLAG"
+    echo "[entrypoint] Odoo initialization complete."
+else
+    echo "[entrypoint] Odoo already initialized, skipping."
+fi
+
 # Stop PostgreSQL (supervisord will manage it from here)
 su -s /bin/bash postgres -c "/usr/lib/postgresql/15/bin/pg_ctl -D $PGDATA stop -w -t 10"
 
 echo "[entrypoint] PostgreSQL setup complete."
-
-# --- Ensure Odoo directories exist ---
-mkdir -p /var/lib/odoo
-chown -R odoo:odoo /var/lib/odoo 2>/dev/null || true
-
 echo "[entrypoint] Starting all services via supervisord..."
 exec supervisord -c /etc/supervisord.conf

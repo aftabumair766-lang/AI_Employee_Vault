@@ -89,6 +89,9 @@ ENV PLATINUM_ODOO_DB=odoo
 ENV PLATINUM_ODOO_USER=admin
 ENV PLATINUM_ODOO_PASSWORD=admin
 
+# Database URL for FastAPI (explicit, avoids .env parsing issues)
+ENV PLATINUM_DATABASE_URL=sqlite:///./ai_employee.db
+
 # Health monitor: API is local, Cloud VM not applicable
 ENV PLATINUM_HEALTH_API_URL=http://localhost:8000
 ENV PLATINUM_HEALTH_CLOUD_URL=
