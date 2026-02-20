@@ -42,9 +42,15 @@ fi
 
 chown -R postgres:postgres "$PGDATA"
 
-# Start PostgreSQL (log to stdout so we can see errors)
+# Start PostgreSQL
 echo "[entrypoint] Starting PostgreSQL..."
-su -s /bin/bash postgres -c "/usr/lib/postgresql/15/bin/pg_ctl -D $PGDATA start -w -t 60 -l /dev/stderr"
+PG_LOGFILE="/tmp/pg_startup.log"
+touch "$PG_LOGFILE" && chown postgres:postgres "$PG_LOGFILE"
+su -s /bin/bash postgres -c "/usr/lib/postgresql/15/bin/pg_ctl -D $PGDATA start -w -t 60 -l $PG_LOGFILE" || {
+    echo "[entrypoint] PostgreSQL failed to start. Log output:"
+    cat "$PG_LOGFILE"
+    exit 1
+}
 
 echo "[entrypoint] PostgreSQL started. Setting up Odoo database..."
 
