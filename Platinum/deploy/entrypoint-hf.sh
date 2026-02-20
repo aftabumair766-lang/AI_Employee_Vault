@@ -2,43 +2,49 @@
 # Entrypoint for HuggingFace Spaces: init PostgreSQL + Odoo DB, then launch supervisord
 set -e
 
-PGDATA="/var/lib/postgresql/15/main"
+PGDATA="/opt/ai-employee/pgdata"
 PGRUN="/var/run/postgresql"
-PGLOG="/var/log/postgresql"
 ODOO_INIT_FLAG="/var/lib/odoo/.initialized"
 
 echo "[entrypoint] Initializing AI Employee (all-in-one mode)..."
 
 # --- PostgreSQL Setup ---
-mkdir -p "$PGRUN" "$PGLOG"
-chown postgres:postgres "$PGRUN" "$PGLOG"
+# Use a fresh data directory (not the Debian auto-created cluster)
+mkdir -p "$PGRUN"
+chown postgres:postgres "$PGRUN"
 chmod 775 "$PGRUN"
 
-# Debian's postgresql-15 package auto-creates a cluster during install.
-# If PG_VERSION doesn't exist (e.g. fresh volume), init manually.
 if [ ! -f "$PGDATA/PG_VERSION" ]; then
-    echo "[entrypoint] Initializing PostgreSQL data directory..."
+    echo "[entrypoint] Initializing fresh PostgreSQL cluster..."
+    rm -rf "$PGDATA"
     mkdir -p "$PGDATA"
-    chown -R postgres:postgres /var/lib/postgresql
+    chown postgres:postgres "$PGDATA"
     su -s /bin/bash postgres -c "/usr/lib/postgresql/15/bin/initdb -D $PGDATA --encoding=UTF8 --locale=C"
+
+    # Configure pg_hba.conf
+    cat > "$PGDATA/pg_hba.conf" <<'PGHBA'
+local   all   postgres   trust
+local   all   all        md5
+host    all   all        127.0.0.1/32   md5
+host    all   all        ::1/128        md5
+PGHBA
+    chown postgres:postgres "$PGDATA/pg_hba.conf"
+
+    # Tune postgresql.conf for HF free tier
+    cat >> "$PGDATA/postgresql.conf" <<'PGCONF'
+listen_addresses = 'localhost'
+port = 5432
+max_connections = 50
+shared_buffers = 128MB
+unix_socket_directories = '/var/run/postgresql'
+PGCONF
 fi
 
-# Ensure postgres owns the data directory
 chown -R postgres:postgres "$PGDATA"
 
-# Configure pg_hba.conf for local trust (so odoo can connect)
-cat > "$PGDATA/pg_hba.conf" <<'PGHBA'
-# TYPE  DATABASE  USER      METHOD
-local   all       postgres  trust
-local   all       all       md5
-host    all       all       127.0.0.1/32  md5
-host    all       all       ::1/128       md5
-PGHBA
-chown postgres:postgres "$PGDATA/pg_hba.conf"
-
-# Start PostgreSQL temporarily for setup
-echo "[entrypoint] Starting PostgreSQL for initial setup..."
-su -s /bin/bash postgres -c "/usr/lib/postgresql/15/bin/pg_ctl -D $PGDATA -l $PGLOG/startup.log start -w -t 60"
+# Start PostgreSQL (log to stdout so we can see errors)
+echo "[entrypoint] Starting PostgreSQL..."
+su -s /bin/bash postgres -c "/usr/lib/postgresql/15/bin/pg_ctl -D $PGDATA start -w -t 60 -l /dev/stderr"
 
 echo "[entrypoint] PostgreSQL started. Setting up Odoo database..."
 
@@ -51,7 +57,7 @@ mkdir -p /var/lib/odoo
 chown -R odoo:odoo /var/lib/odoo 2>/dev/null || true
 
 if [ ! -f "$ODOO_INIT_FLAG" ]; then
-    echo "[entrypoint] Initializing Odoo base module (first run, this takes a while)..."
+    echo "[entrypoint] Initializing Odoo base module (first run, takes ~60s)..."
     su -s /bin/bash odoo -c "/usr/bin/odoo --config=/etc/odoo/odoo.conf -i base --stop-after-init --no-http" || {
         echo "[entrypoint] WARNING: Odoo base init failed, will retry on service start"
     }
@@ -64,6 +70,5 @@ fi
 # Stop PostgreSQL (supervisord will manage it from here)
 su -s /bin/bash postgres -c "/usr/lib/postgresql/15/bin/pg_ctl -D $PGDATA stop -w -t 10"
 
-echo "[entrypoint] PostgreSQL setup complete."
-echo "[entrypoint] Starting all services via supervisord..."
+echo "[entrypoint] Setup complete. Starting all services via supervisord..."
 exec supervisord -c /etc/supervisord.conf
