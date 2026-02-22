@@ -4,6 +4,8 @@ emoji: 📈
 colorFrom: green
 colorTo: purple
 sdk: docker
+app_port: 7860
+dockerfile: Platinum/deploy/Dockerfile.hf
 pinned: false
 ---
 

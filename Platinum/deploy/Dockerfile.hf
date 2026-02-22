@@ -1,0 +1,71 @@
+# AI Employee - HuggingFace Spaces Deployment
+# Full stack: PostgreSQL 15 + Odoo 17 + FastAPI + Cloud Agent
+#
+# Build context: repository root (AI_Employee_Vault/)
+# Usage: docker build -f Platinum/deploy/Dockerfile.hf .
+#
+# Port: 7860 (HuggingFace default)
+
+FROM python:3.11-slim-bookworm
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl wget gnupg lsb-release ca-certificates \
+    git openssh-client supervisor \
+    # PostgreSQL 15
+    postgresql-15 \
+    # Odoo system dependencies
+    libxml2-dev libxslt1-dev libldap2-dev libsasl2-dev \
+    libjpeg-dev libpng-dev zlib1g-dev libpq-dev \
+    node-less xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Caddy
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' \
+        | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg \
+    && curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' \
+        | tee /etc/apt/sources.list.d/caddy-stable.list \
+    && apt-get update && apt-get install -y caddy \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Odoo 17
+RUN wget -q -O /tmp/odoo.deb \
+        https://nightly.odoo.com/17.0/nightly/deb/odoo_17.0.latest_all.deb \
+    && apt-get update \
+    && apt-get install -y /tmp/odoo.deb \
+    && rm -f /tmp/odoo.deb \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/ai-employee
+
+# Install Python dependencies
+COPY Platinum/requirements-docker.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy Platinum source code
+COPY Platinum/__init__.py ./Platinum/__init__.py
+COPY Platinum/src/ ./Platinum/src/
+
+# Copy API code
+COPY Working_Gold/TASK_206/api/ ./api/
+
+# Copy HuggingFace-specific configs
+COPY Platinum/deploy/supervisord.conf /etc/supervisord.conf
+COPY Platinum/deploy/Caddyfile.hf /etc/caddy/Caddyfile
+COPY Platinum/deploy/odoo-hf.conf /etc/odoo/odoo.conf
+COPY Platinum/deploy/entrypoint-hf.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Create vault directory structure
+RUN mkdir -p /opt/ai-employee/vault/Platinum/{Needs_Action,Pending_Approval,In_Progress,Done,Plans,Updates,Logs,Signals}/{email,social,accounting,monitoring}
+
+# Environment
+ENV PYTHONPATH=/opt/ai-employee
+ENV PYTHONUNBUFFERED=1
+ENV PLATINUM_AGENT_ROLE=cloud
+ENV PLATINUM_VAULT_PATH=/opt/ai-employee/vault
+ENV PORT=7860
+
+EXPOSE 7860
+
+ENTRYPOINT ["/entrypoint.sh"]
