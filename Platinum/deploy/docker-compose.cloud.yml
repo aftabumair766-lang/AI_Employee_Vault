@@ -57,10 +57,6 @@ services:
     environment:
       - PLATINUM_AGENT_ROLE=cloud
       - PLATINUM_VAULT_PATH=/opt/ai-employee/vault
-      - PLATINUM_IMAP_HOST=${PLATINUM_IMAP_HOST:-imap.gmail.com}
-      - PLATINUM_IMAP_PORT=${PLATINUM_IMAP_PORT:-993}
-      - PLATINUM_IMAP_USER=${PLATINUM_IMAP_USER:-}
-      - PLATINUM_IMAP_PASSWORD=${PLATINUM_IMAP_PASSWORD:-}
       - PLATINUM_ODOO_URL=http://odoo:8069
       - PLATINUM_ODOO_DB=odoo
       - PLATINUM_ODOO_USER=${PLATINUM_ODOO_USER:-admin}
