@@ -1,12 +1,6 @@
----
-title: Ai Employee Vault
-emoji: 📈
-colorFrom: green
-colorTo: purple
-sdk: docker
-app_port: 7860
-dockerfile: Platinum/deploy/Dockerfile.hf
-pinned: false
----
+# AI Employee Vault
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+Deployed on Google Cloud Platform (GCP).
+
+- **VM IP**: 34.59.204.156
+- **Deployment**: Docker Compose on GCP VM
